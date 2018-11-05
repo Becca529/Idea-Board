@@ -15,5 +15,8 @@ function createNewIdea(idea, callback){
   
 };
 
-
+function loadIdeaBoard(){
+    //redirect to idea board page?
+    window.location.replace("board.page.js");
+}
         
