@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Create</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+    <link rel="stylesheet" href="../idea-board.css">
+</head>
+<body>
+    <a href="board.html">Back to Home</a>
+    <h1>Create New Idea</h1>
+    <form id="js-new-idea-form">
+        <fieldset>
+        <label for="title-txt">
+            Title:
+            <br><input id="title-txt" class="form-field" type="text" required> 
+        </label>
+        <br>
+        <label for="description-txt">
+            Description:
+            <br><textarea id="description-txt" class="form-field"></textarea> 
+        </label>
+        <br>
+        <label for="status-select">
+            Status:
+            <br>
+            <select name ="status-options" id="status-select" class="form-field" required> 
+              <option value="not-started">Not Started</option>
+              <option value="planning">Planning</option>
+              <option value="in-progress">In Progress</option>
+              <option value="completed">Completed</option>
+              <option value="on-hold">On Hold</option>
+            </select> 
+        </label>
+        <br>
+        <div class="stars-rating form-field">
+        <label for="likability-radio">
+            Likablity: 
+                <fieldset id="likability-radio">
+                <input type="radio" id="star3" name="rating" value="3" title="Love"> 
+                <label for="star-3"></label>
+                <input type="radio" id="star2" name="rating" value="2" title="Like">
+                <label for="star-2"></label>
+                <input type="radio" id="star1" name="rating" value="1" title="Eh">
+                <label for="star-1"></label>
+                </fieldset>
+        </label>
+        </div>
+        <input type="submit" value="Create New Idea">
+    </fieldset>
+    </form>
+    <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <script src="./create.page.js"></script>
+</body>
+</html>
