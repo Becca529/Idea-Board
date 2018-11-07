@@ -6,6 +6,7 @@ function onCreateSubmitNewIdeaBtn() {
             description: $('#description-txt').val(),
             status: $('#status-options').val(),
             likability: $('#likability-radio').val()
+            //userid?
         };
         createNewIdea(newIdea, loadIdeaBoard);
     }
