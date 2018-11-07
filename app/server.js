@@ -9,18 +9,24 @@ mongoose.Promise = global.Promise;
 const {DATABASE_URL, PORT} = require('./config');
 const { userRouter } = require('./user/user.router');
 const { ideaRouter } = require("./idea/idea.router");
+const { authRouter } = require('./auth/auth.router');
+const { localStrategy, jwtStrategy } = require('./auth/auth.strategy');
 
 const app = express();
 let server;
-app.use(express.json()); // Required so AJAX request JSON data payload can be parsed and saved into request.body
-app.use(express.static('./public')); // Intercepts all HTTP requests that match files inside /public
+passport.use(localStrategy); // Configure Passport to use our localStrategy when receiving Username + Password combinations
+passport.use(jwtStrategy); // Configure Passport to use our jwtStrategy when receving JSON Web Tokens
 
 //MIDDLEWARE
 app.use(morgan("common"));
+app.use(express.json()); // Required so AJAX request JSON data payload can be parsed and saved into request.body
+app.use(express.static('./public')); // Intercepts all HTTP requests that match files inside /public
 
 //ROUTER SETUP
 app.use('/user', userRouter); // Redirects all calls to /api/user to userRouter.
-app.use('/ideaboard', ideaRouter); // Redirects all calls to /api/note to noteRouter.
+app.use('/ideaboard', ideaRouter); // Redirects all calls to /ideaboard to ideaRouter.
+app.use('/auth', authRouter); // Redirects all calls to /user to userRouter.
+
 
 // Unhandled HTTP request - return 404 not found error
 app.use('*', function (req, res) {

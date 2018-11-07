@@ -5,7 +5,7 @@ function doLogIn(credentials, success, failure){
 //make function that call sucess or fail - success set user to something
 }
 
-function doSignUp(newUser, success, failure){
+function doSignUp(newUserData, success, failure){
     
 }
 
@@ -25,6 +25,14 @@ function generateWelcomeText() {
         <h2>A place to create and store your creative juices for ideas and projects</h2>
         <button id="js-show-log-in-form-btn" type="button">Log In</button>
         <p>New user?<button id="js-show-sign-up-form-btn" type="button">Sign up</button></p>
+    </div>`);
+}
+
+function generateAccountCreatedSuccessText() {
+    $('.js-content').html (
+    `<div class= "js-account-created">
+        <h1>Your account has been created successfully!</h1>
+        <button id="js-show-log-in-form-btn" type="button">Log In</button>
     </div>`);
 }
 
@@ -124,26 +132,164 @@ function handleLogInSubmit (){
             username: $('#username-txt').val(),
             password: $('#password-txt').val()
         }
+
+        logInUser(credentials, generateLoggedInContent, signUpFailure);
+
     });
 }
 
 function handleSignUpSubmit (){
     $('body').on("submit", "#form-sign-up", (event) => {
         event.preventDefault();
-        const newUser = {
+        
+        const newUserData = {
             username: $('#username-txt').val(),
             password: $('#password-txt').val(),
             firstName: $('#first-name-txt').val(),
             lastName: $('#last-name-txt').val(),
-            email: $('#email-txt').val(),
-            password: $('#password-txt').val()
+            email: $('#email-txt').val()
         }
+
+        signUpUser(newUserData, generateAccountCreatedSuccessText, signUpFailure);
     });
 }
 
 function handleLogOut (){
-  //
+  
 }
+
+//HTTP REQUESTS
+
+function logInUser(credentials, onSuccess, onError){
+    const settings = { 
+        type: 'POST',
+        url: '/auth/login',
+        dataType: 'json',
+        data: JSON.stringify(credentials),
+        success: onSuccess,
+        error: err => {
+            console.error(err);
+            if (onError) {
+                onError(err);
+            }
+        }
+    };
+    $.ajax(settings);    
+
+}
+
+function signUpUser (newUserData, onSuccess, onError) {
+    const settings = { 
+        type: 'POST',
+        url: '/user',
+        dataType: 'json',
+        data: JSON.stringify(newUserData),
+        success: onSuccess,
+        error: err => {
+            console.error(err);
+            if (onError) {
+                onError(err);
+            }
+        }
+    };
+    $.ajax(settings);
+}
+
+/* function signUpFailure(err){
+    console.error(err);
+        if (onFailure) {
+            onError(err); 
+        };
+} */
+
+function getUserIdeas(options){
+    const { jwtToken, onSuccess, onError } = options;
+    $.ajax({
+        type: 'GET',
+        url: '/ideaboard',
+        dataType: 'json',
+        data: undefined,
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', `Bearer ${jwtToken}`);
+        },
+        success: onSuccess,
+        error: err => {
+            console.error(err);
+            if (onError) {
+                onError(err);
+            }
+        }
+    });
+}
+
+function getIdeabyID(options){
+    const { ideaId, onSuccess } = options;
+    $.getJSON(`/ideaboard/${ideaId}`, onSuccess);
+}
+
+function createNote(options) {
+    const { jwtToken, newIdea, onSuccess, onError } = options;
+
+    $.ajax({
+        type: 'POST',
+        url: '/ideaboard',
+        dataType: 'json',
+        data: JSON.stringify(newIdea),
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', `Bearer ${jwtToken}`);
+        },
+        success: onSuccess,
+        error: err => {
+            console.error(err);
+            if (onError) {
+                onError();
+            }
+        }
+    });
+}
+
+function updateIdea(options) {
+    const {jwtToken, ideaID, newIdea, onSuccess, onError } = options;
+
+    $.ajax({
+        type: 'PUT',
+        url: `/idea/${ideaId}`,
+        dataType: 'json',
+        data: JSON.stringify(newIdea),
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', `Bearer ${jwtToken}`);
+        },
+        success: onSuccess,
+        error: err => {
+            console.error(err);
+            if (onError) {
+                onError();
+            }
+        }
+    });
+}
+
+function deleteIdea(options) {
+    const { ideaId, jwtToken, onSuccess, onError } = options;
+    $.ajax({
+        type: 'delete',
+        url: `/idea/${ideaId}`,
+        dataType: 'json',
+        data: undefined,
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', `Bearer ${jwtToken}`);
+        },
+        success: onSuccess,
+        error: err => {
+            console.error(err);
+            if (onError) {
+                onError(err);
+            }
+        }
+    });
+}
+
+
 
 function setUpEventHandlers(){
     handleShowSignUp();
