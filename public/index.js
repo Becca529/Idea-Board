@@ -28,10 +28,9 @@ function generateWelcomeText() {
     </div>`);
 }
 
-
 function generateLogInForm(){
     return `
-    <form id="log-in-form">
+    <form id="form-log-in">
         <fieldset>
             <legend>Please Sign In</legend>
             <ul>
@@ -50,14 +49,14 @@ function generateLogInForm(){
 
 function generateSignUpForm(){
 return `
-<form id="sign-up-form">
+<form id="form-sign-up" method="post">
     <fieldset>
-        <legend>Sign Up</legend>
+        <legend>Create an Account</legend>
         <ul>   
        <li><label for="first-name-txt">
-            Name: <input id="first-name-txt" type="text" required></label></li>
+            First Name: <input id="first-name-txt" type="text" required></label></li>
         <li><label for="last-name-txt">
-            Name: <input id="last-name-txt" type="text" required></label></li>
+            Last Name: <input id="last-name-txt" type="text" required></label></li>
         <li><label for="email-txt">
             Email: <input id="email-txt" type="email" required>
         </label></li>
@@ -67,7 +66,7 @@ return `
         <li><label for="password-txt">
             Password: <input id="password-txt" type="password" required>
         </label></li>
-        <li><input type="submit" value="Create Account"></li>
+        <li><button type="submit" class="primary-button form-sign-up-button" value="submit"></button></li>
         </ul>
     </fieldset>
 </form>
@@ -93,7 +92,8 @@ function displayNav(state, container, append = false) {
 }
 
 function displayLogInForm(container, append = false){
-    appendOrReplace(null, container, generateSignInForm, append);
+    appendOrReplace(null, container, generateLogInForm, append);
+    
 }
 
 function displaySignUpForm(container, append = false){
@@ -106,19 +106,19 @@ function displayLoggedInContent(contentData, container, append = false){
 
 //EVENT HANDLER FUNCTIONS
 function handleShowSignUp (){
-    $('body').on("click", ".js-show-sign-up-btn", (event) => {
-        displaySignUpForm($('js-content'));
+    $('body').on("click", "#js-show-sign-up-form-btn", (event) => {
+        displaySignUpForm($('.js-content'));
     });
 }
 
 function handleShowLogIn (){
-    $('body').on("click", ".js-show-log-in-btn", (event) => {
-        displayLogInForm($('js-content'));
+    $('body').on("click", "#js-show-log-in-form-btn", (event) => {
+        displayLogInForm($('.js-content'));
     });
 }
 
 function handleLogInSubmit (){
-    $('body').on("submit", "#log-in-form", (event) => {
+    $('body').on("submit", "#form-log-in", (event) => {
         event.preventDefault();
         const credentials = {
             username: $('#username-txt').val(),
@@ -128,7 +128,7 @@ function handleLogInSubmit (){
 }
 
 function handleSignUpSubmit (){
-    $('body').on("submit", "#sign-up-form", (event) => {
+    $('body').on("submit", "#form-sign-up", (event) => {
         event.preventDefault();
         const newUser = {
             username: $('#username-txt').val(),
