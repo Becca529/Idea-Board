@@ -5,24 +5,22 @@ const { User, UserJoiSchema } = require('./user.model.js');
 
 const userRouter = express.Router();
 
-// CREATE NEW USER
-userRouter.post('/', (request, response) => {
-    // Remember, We can access the request body payload thanks to the express.json() middleware we used in server.js
+//Creates new user
+userRouter.post('/', (req, res) => {
     const newUser = {
         firstname: request.body.firstname,
-        firstname: request.body.lastname,
+        lastname: request.body.lastname,
         email: request.body.email,
         username: request.body.username,
         password: request.body.password
     };
 
-    // Step 1: Validate new user information is correct.
+    //Validate new user information against joi schema
     const validation = Joi.validate(newUser, UserJoiSchema);
     if (validation.error) {
-        // Step 2A: If validation error is found, end the the request with a server error and error message.
-        return response.status(400).json({ error: validation.error });
+        return res.status(400).json({ error: validation.error });
     }
-    // Step 2B: Verify if the new user's email or username doesn't already exist in the database using Mongoose.Model.findOne() 
+    //Validate that there is not an existing account with either the provided email or username in MongoDB Step 
     User.findOne({
         $or: [
             { email: newUser.email },
@@ -30,55 +28,54 @@ userRouter.post('/', (request, response) => {
         ]
     }).then(user => {
         if (user) {
-            // Step 3A: If user already exists, abruptly end the request with an error.
+            //if existing email or username found - return status code and error message
             return response.status(400).json({ error: 'Database Error: A user with that username and/or email already exists.' });
         }
-        // Step 3B: We should NEVER store raw passwords, so instead we wait while we encrypt it into a hash. 
+    //If no username/email conflict - hash entered password
         return User.hashPassword(newUser.password);
     }).then(passwordHash => {
         newUser.password = passwordHash;
-        // Step 4: Once password hash has replaced the raw password, we attempt to create the new user using Mongoose.Model.create()
+        //create new user in mongodb
         User.create(newUser)
             .then(createdUser => {
-                // Step 5A: If created successfully, return the newly created user information 
-                return response.status(201).json(createdUser.serialize());
+                //if successful - return newly created user info 
+                return res.status(201).json(createdUser.serialize());
             })
-            .catch(error => {
-                // Step 5B: if an error ocurred, respond with an error
-                console.error(error);
-                return response.status(500).json({
-                    error: error.message
-                });
+            .catch(err => {
+                //if error with creating new user - return HTTP status code and error
+                console.error(err);
+                return res.status(500).json({error: err.message});
             });
     });
 });
 
-// RETRIEVE USERS
-userRouter.get('/', (request, response) => {
-    // Step 1: Attempt to retrieve all users from the database using Mongoose.Model.find()
+//Get all users
+userRouter.get('/', (req, res) => {
+    //Retrieve all users from mongoDb Step 1: Attempt to retrieve all users from the database using Mongoose.Model.find()
     User.find()
         .then(users => {
-            // Step 2A: Return the correct HTTP status code, and the users correctly formatted via serialization.
-            return response.status(200).json(
+            //Return formatted users from serialized method and HTTP status code 
+            return res.status(200).json(
                 users.map(user => user.serialize())
             );
         })
-        .catch(error => {
-            // Step 2B: If an error ocurred, return an error HTTP status code and the error in JSON format.
-            return response.status(500).json(error);
+        .catch(err => {
+            //If error - return HTTP status code and error
+            return res.status(500).json(err);
         });
 });
-// RETRIEVE ONE USER
-userRouter.get('/:userid', (request, response) => {
-    // Step 1: Attempt to retrieve a specific user using Mongoose.Model.findById()
-    User.findById(request.params.userid)
+
+//Get user by id
+userRouter.get('/:userid', (req, res) => {
+    //Retrieve specific user from database
+    User.findById(req.params.userid)
         .then(user => {
-            // Step 2A: Return the correct HTTP status code, and the user correctly formatted via serialization.
-            return response.status(200).json(user.serialize());
+            //If user id found - return status code and serialized user data
+            return res.status(200).json(user.serialize());
         })
         .catch(error => {
-            // Step 2B: If an error ocurred, return an error HTTP status code and the error in JSON format.
-            return response.status(500).json(error);
+            //If error - return HTTP status code and error
+            return res.status(500).json(error);
         });
 });
 

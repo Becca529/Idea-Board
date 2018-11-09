@@ -6,6 +6,7 @@ const { JWT_SECRET, JWT_EXPIRY } = require('../config.js');
 
 const authRouter = express.Router();
 
+//Create a new jsonwebtoken
 function createJwtToken(user) {
     return jwt.sign({ user }, JWT_SECRET, {
         subject: user.username,
@@ -14,16 +15,18 @@ function createJwtToken(user) {
     });
 }
 
-authRouter.post('/login', localPassportMiddleware, (request, response) => {
-    const user = request.user.serialize();
+//Logs user in if valid creditionals
+authRouter.post('/login', localPassportMiddleware, (req, res) => {
+    const user = req.user.serialize();
     const jwtToken = createJwtToken(user);
-    response.json({ jwtToken, user });
+    res.json({ jwtToken, user });
 });
 
-authRouter.post('/refresh', jwtPassportMiddleware, (request, response) => {
-    const user = request.user;
+//Refresh jsonwebtoken 
+authRouter.post('/refresh', jwtPassportMiddleware, (req, res) => {
+    const user = req.user;
     const jwtToken = createJwtToken(user);
-    response.json({ jwtToken, user });
+    res.json({ jwtToken, user });
 });
 
 module.exports = { authRouter };

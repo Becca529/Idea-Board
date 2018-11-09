@@ -1,10 +1,9 @@
 'use strict'
 
-const express = require("express");
-const morgan = require("morgan");
+const express = require('express');
+const morgan = require('morgan');
 const mongoose = require('mongoose');
 const passport = require('passport');
-mongoose.Promise = global.Promise;
 
 const {DATABASE_URL, PORT} = require('./config');
 const { userRouter } = require('./user/user.router');
@@ -14,21 +13,23 @@ const { localStrategy, jwtStrategy } = require('./auth/auth.strategy');
 
 const app = express();
 let server;
-passport.use(localStrategy); // Configure Passport to use our localStrategy when receiving Username + Password combinations
-passport.use(jwtStrategy); // Configure Passport to use our jwtStrategy when receving JSON Web Tokens
 
-//MIDDLEWARE
+//Configure passport to use local/jsonweb token strategies for authetentation 
+passport.use(localStrategy);
+passport.use(jwtStrategy); 
+
+//Middleware
 app.use(morgan("common"));
-app.use(express.json()); // Required so AJAX request JSON data payload can be parsed and saved into request.body
-app.use(express.static('./public')); // Intercepts all HTTP requests that match files inside /public
+app.use(express.json()); 
+app.use(express.static('./public')); 
 
-//ROUTER SETUP
+//Routers
 app.use('/user', userRouter); // Redirects all calls to /api/user to userRouter.
 app.use('/board', ideaRouter); // Redirects all calls to /board to ideaRouter.
 app.use('/auth', authRouter); // Redirects all calls to /user to userRouter.
 
 
-// Unhandled HTTP request - return 404 not found error
+//For unhandled HTTP requests - return 404 not found error
 app.use('*', function (req, res) {
   res.status(404).json({ error: 'Not Found.' });
 });
@@ -36,29 +37,23 @@ app.use('*', function (req, res) {
 
 module.exports = { app, startServer, stopServer };
 
-function startServer(testEnv) {
+//Connect to MongoDB database and start expressJS server
+function startServer(dataBaseUrl = DATABASE_URL, port = PORT) {
   return new Promise((resolve, reject) => {
-      let mongoUrl;
-
-      if (testEnv) {
-          mongoUrl = TEST_MONGO_URL;
-      } else {
-          mongoUrl = MONGO_URL;
-      }
-      // Step 1: Attempt to connect to MongoDB with mongoose
-      mongoose.connect(mongoUrl, { useNewUrlParser: true }, err => {
+    //Connect to database
+    mongoose.connect(dataBaseUrl, { useNewUrlParser: true }, err => {
           if (err) {
-              // Step 2A: If there is an error starting mongo, log error, reject promise and stop code execution.
+              //If error connecting to database - print out error to console and reject promise
               console.error(err);
               return reject(err);
           } else {
-              // Step 2B: Start Express server
-              server = app.listen(PORT, () => {
-                  // Step 3A: Log success message to console and resolve promise.
-                  console.log(`Express server listening on http://localhost:${PORT}`);
+              //If database connect successful - Start Express server
+              server = app.listen(port, () => {
+                  //If expressJS server start successfull - print success msg to console and resolve promise
+                  console.log(`Express server listening on http://localhost:${port}`);
                   resolve();
               }).on('error', err => {
-                  // Step 3B: If there was a problem starting the Express server, disconnect from MongoDB immediately, log error to console and reject promise.
+                  ////If error with expressJS server start - disconnect from MongoDB database, print out error to console and reject promise
                   mongoose.disconnect();
                   console.error(err);
                   reject(err);
@@ -68,22 +63,32 @@ function startServer(testEnv) {
   });
 }
 
+//Disconnect from MongoDB database and shuts down expressJS server
 function stopServer() {
-  // Step 1: Disconnect from the MongoDB database using Mongoose
+  //Disconnect from database
   return mongoose
       .disconnect()
       .then(() => new Promise((resolve, reject) => {
-          // Step 2: Shut down the ExpressJS server
+          //Shutdown ExpressJS server
           server.close(err => {
               if (err) {
-                  // Step 3A: If an error ocurred while shutting down, print out the error to the console and resolve promise;
+                  //If error with server shutdown - print out error to console and resolve promise
                   console.error(err);
                   return reject(err);
               } else {
-                  // Step 3B: If the server shutdown correctly, log a success message.
+                  //If server shutdown successfull - print out success msg to console
                   console.log('Express server stopped.');
                   resolve();
               }
           });
       }));
     }
+
+
+if (require.main === module) {
+    startServer().catch(err => {
+        console.error(err);
+    });
+}
+
+module.exports = { app, startServer, stopServer };

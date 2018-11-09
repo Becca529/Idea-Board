@@ -5,9 +5,24 @@ function doLogIn(credentials, success, failure){
 //make function that call sucess or fail - success set user to something
 }
 
-function doSignUp(newUserData, success, failure){
-    
-}
+
+function doSignUpUser (newUserData, onSuccess, onError) {
+    const settings = { 
+            type: 'POST',
+            url: '/user',
+            dataType: 'json',
+            data: JSON.stringify(newUserData),
+            success: onSuccess,
+            error: err => {
+                 console.error(err);
+                 if (onError) {
+                     onError(err);
+                 }
+            }
+        };
+        $.ajax(settings);
+    }
+
 
 function doLogOut(success, failure){
     
@@ -19,7 +34,7 @@ function getLoggedInContent(success, failure){
 
 //GENERATOR FUNCTIONS
 function generateWelcomeText() {
-    $('.js-content').html (
+ $('.js-content').html (
     `<div class= "js-welcome-content">
         <h1>Welcome to Idea Board</h1>
         <h2>A place to create and store your creative juices for ideas and projects</h2>
@@ -28,12 +43,13 @@ function generateWelcomeText() {
     </div>`);
 }
 
-function generateAccountCreatedSuccessText() {
-    $('.js-content').html (
-    `<div class= "js-account-created">
+function generateSignUpSuccessHTML() {
+    return `
+    <div class= "js-account-created">
         <h1>Your account has been created successfully!</h1>
         <button id="js-show-log-in-form-btn" type="button">Log In</button>
-    </div>`);
+    </div>
+    `
 }
 
 function generateLogInForm(){
@@ -95,9 +111,9 @@ function displayIdeaBoardTitle(){
 
 
 function generateLoggedInContent(contentData){
-    //get all ideas by user request
-    displayLoggedInNav();
-    displayIdeaBoardTitle();
+    //get all ideas by us
+    displayLoggedInNav(); //add to display function
+    displayIdeaBoardTitle(); //add to display
     const userIdeas = contentData.map((idea, index) => generateIdeaHTML(idea));
     $('.js-user-ideas').html(userIdeas);
 }
@@ -143,6 +159,10 @@ function displayLoggedInContent(contentData, container, append = false){
     appendOrReplace(contentData, container, generateLoggedInContent, append);
 };
 
+function displaySignUpSuccessHTML(contentData, container, append = false){
+    appendOrReplace(contentData, container, generateLoggedInContent, append);
+};
+
 //EVENT HANDLER FUNCTIONS
 function handleShowSignUp (){
     $('body').on("click", "#js-show-sign-up-form-btn", (event) => {
@@ -181,7 +201,7 @@ function handleSignUpSubmit (){
             email: $('#email-txt').val()
         }
 
-        signUpUser(newUserData, generateAccountCreatedSuccessText);
+        doSignUpUser(newUserData, displaySignUpSuccessHTML);
     });
     //on failure/error? third parameter?
 }
@@ -210,22 +230,7 @@ function logInUser(credentials, onSuccess, onError){
 
 }
 
-function signUpUser (newUserData, onSuccess) {
-    const settings = { 
-        type: 'POST',
-        url: '/user',
-        dataType: 'json',
-        data: JSON.stringify(newUserData),
-        success: onSuccess,
-        // error: err => {
-        //     console.error(err);
-        //     if (onError) {
-        //         onError(err);
-        //     }
-        //}
-    };
-    $.ajax(settings);
-}
+
 
 
 function getUserIdeas(options){

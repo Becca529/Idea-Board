@@ -22,7 +22,7 @@ ideaRouter.get('/board', (req, res) => {
 //Create a new idea 
 ideaRouter.post('/', (req, res) => {
     const requiredFields = ['userName', 'title', 'status'];
-    const miss
+    
     requiredFields.forEach(field => {
     if (!(field in req.body)) {
       const message = `Missing \`${field}\` in request body`;
@@ -34,6 +34,7 @@ ideaRouter.post('/', (req, res) => {
 
 })
 
+module.exports = { ideaRouter };
 
 
 //Delete an idea

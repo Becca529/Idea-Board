@@ -1,38 +1,38 @@
 const passport = require('passport');
+
 const { Strategy: LocalStrategy } = require('passport-local');
 const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
-
 const { User } = require('../user/user.model');
 const { JWT_SECRET } = require('../config');
 
 
-// The LocalStrategy gets used while trying to access an Endpoint using a User + Password combination
+//Validates User + Password combination when accessing endpoint
 const localStrategy = new LocalStrategy((username, password, passportVerify) => {
     let user;
-    // Step 1: Verify the username exists
+    //Validate username exists in database
     User.findOne({ username: username }).then(_user => {
         user = _user;
         if (!user) {
-            // Step 2A: If user is not found on the database, reject promise with an error.
+            //If username not found - reject promise and return with login error
             return Promise.reject({
                 reason: 'LoginError',
                 message: 'Incorrect username or password'
             });
         }
-        // Step 2B: Compare the user's password against the stored password hash by running it against the same algorithm.
+        //If username found - validate user's password against stored password hash
         return user.validatePassword(password);
     }).then(isValid => {
         if (!isValid) {
-            // Step 3A: If password doesn't match the stored password hash, reject promise with an error.
+            // If password does not match stored hash password - reject promise and return with login error
             return Promise.reject({
                 reason: 'LoginError',
                 message: 'Incorrect username or password'
             });
         }
-        // Step 3B: If authentication is succesfull, execute the passportVerify callback correctly.
+        //If authentication is sucessfull return the passportVerify callback passing in user
         return passportVerify(null, user);
     }).catch(err => {
-        // Step 4: If an error ocurred at any stage during the process, execute the passportVerify callback correctly.
+        //Catch all error handling - if any other log in error occurs return passportVerify callback passing in error msg
         if (err.reason === 'LoginError') {
             return passportVerify(null, false, err.message);
         }
@@ -40,7 +40,7 @@ const localStrategy = new LocalStrategy((username, password, passportVerify) => 
     });
 });
 
-// The JwtStrategy gets used while trying to access an Endpoint using a JSON Web Token
+//Validates json web token when accessing endpoint
 const jwtStrategy = new JwtStrategy(
     {
         secretOrKey: JWT_SECRET,
@@ -55,9 +55,4 @@ const jwtStrategy = new JwtStrategy(
 const localPassportMiddleware = passport.authenticate('local', { session: false });
 const jwtPassportMiddleware = passport.authenticate('jwt', { session: false });
 
-module.exports = {
-    localStrategy,
-    jwtStrategy,
-    localPassportMiddleware,
-    jwtPassportMiddleware
-};
+module.exports = { localStrategy, jwtStrategy, localPassportMiddleware, jwtPassportMiddleware };
