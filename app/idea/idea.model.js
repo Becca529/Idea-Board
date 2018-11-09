@@ -1,8 +1,12 @@
 const mongoose = require('mongoose');
 
+const noteScehma = mongoose.Schema ({
+    content: { type: String, required: true },
+    createDate: { type: Date, default: Date.now }
+});
 
 const ideaSchema = mongoose.Schema ({
-    userName: { type: string, required: true },
+    userName: { type: String, required: true },
     title: { type: String, required: true },
     description: { type: String},
     status: {type: String, required: true },
@@ -11,10 +15,7 @@ const ideaSchema = mongoose.Schema ({
     notes: [noteScehma]
 });
 
-const noteScehma = mongoose.Schema ({
-    content: { type: String, required: true },
-    createDate: { type: Date, default: Date.now }
-});
+
 
 ideaSchema.methods.serialize = function() {
     return {

@@ -6,27 +6,22 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Idea Board</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
-	<link rel="stylesheet" href="../idea-board.css">
+	<link rel="stylesheet" href="./idea-board.css">
 </head>
 <body>
     <header role ="banner">
         <nav role ="navigation">
             <div class = "home-link">
-              <a href="index.html"><img src="imgs/maze.png" class="icon-img" alt="home-link"></a>
+              <a href="index.html"><img src="" class="icon-img" alt="home-link"></a>
             </div> 
-            <ul class="account-details hidden">
+            <ul class="logged-in-nav-details" hidden>
               <li>Welcome: <span class="acount-name"></span></li>
               <li><button id="js-log-out-btn" type="button">Log Out</button></li>
             </ul>
         </nav>
      </header>
         <main role = "main">
-          <div class="row">
-            <div class= "col-12" >
-              <div class="js-content">
-              </div>
-            </div>
-          </div>
+          <div class="js-content"></div>
         </main>
     <script
         src="https://code.jquery.com/jquery-3.3.1.min.js"

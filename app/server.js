@@ -3,7 +3,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const mongoose = require('mongoose');
-//const passport = require('passport');
+const passport = require('passport');
 mongoose.Promise = global.Promise;
 
 const {DATABASE_URL, PORT} = require('./config');
@@ -24,7 +24,7 @@ app.use(express.static('./public')); // Intercepts all HTTP requests that match 
 
 //ROUTER SETUP
 app.use('/user', userRouter); // Redirects all calls to /api/user to userRouter.
-app.use('/ideaboard', ideaRouter); // Redirects all calls to /ideaboard to ideaRouter.
+app.use('/board', ideaRouter); // Redirects all calls to /board to ideaRouter.
 app.use('/auth', authRouter); // Redirects all calls to /user to userRouter.
 
 

@@ -74,19 +74,50 @@ return `
         <li><label for="password-txt">
             Password: <input id="password-txt" type="password" required>
         </label></li>
-        <li><button type="submit" class="primary-button form-sign-up-button" value="submit"></button></li>
+        <li><button type="submit" class="primary-button form-sign-up-button" value="submit">Submit</button></li>
         </ul>
     </fieldset>
 </form>
 `
 }
 
-function generateLoggedInContent(contentData){
-
+function displayIdeaBoardTitle(){
+    $('.js-content').html(
+    `<div class= "js-idea-board">
+        <div class= "idea-board-header">
+            <h1 class="idea-board-title">Idea Board</h1>
+            <button class="js-show-new-idea-form-btn">Add New Idea</button>
+        </div>
+        <div class="js-user-ideas">
+        </div>
+  </div>`)
 }
 
-function generateNav(state){
 
+function generateLoggedInContent(contentData){
+    //get all ideas by user request
+    displayLoggedInNav();
+    displayIdeaBoardTitle();
+    const userIdeas = contentData.map((idea, index) => generateIdeaHTML(idea));
+    $('.js-user-ideas').html(userIdeas);
+}
+
+function generateIdeaHTML(idea) {
+   return `
+   <div class = "idea">
+    <ul class = "idea-board-details">
+         <li class="idea-title">${idea.title}</li>
+         <li class="idea-description">${idea.description}</li>
+         <li class="idea-status">${idea.status}</li>
+    </ul>
+    <button id="js-show-idea-details-btn">View Details/Edit</button>
+    </div>
+   `
+}
+
+function generateLoggedInNav(){
+//add user name and log out button to nav bar
+$( "logged-in-nav-details" ).toggle();
 }
 
 //DISPLAY FUNCTIONS
@@ -133,8 +164,8 @@ function handleLogInSubmit (){
             password: $('#password-txt').val()
         }
 
-        logInUser(credentials, generateLoggedInContent, signUpFailure);
-
+        logInUser(credentials, generateLoggedInContent);
+//error handling? third parameter
     });
 }
 
@@ -150,8 +181,9 @@ function handleSignUpSubmit (){
             email: $('#email-txt').val()
         }
 
-        signUpUser(newUserData, generateAccountCreatedSuccessText, signUpFailure);
+        signUpUser(newUserData, generateAccountCreatedSuccessText);
     });
+    //on failure/error? third parameter?
 }
 
 function handleLogOut (){
@@ -178,29 +210,23 @@ function logInUser(credentials, onSuccess, onError){
 
 }
 
-function signUpUser (newUserData, onSuccess, onError) {
+function signUpUser (newUserData, onSuccess) {
     const settings = { 
         type: 'POST',
         url: '/user',
         dataType: 'json',
         data: JSON.stringify(newUserData),
         success: onSuccess,
-        error: err => {
-            console.error(err);
-            if (onError) {
-                onError(err);
-            }
-        }
+        // error: err => {
+        //     console.error(err);
+        //     if (onError) {
+        //         onError(err);
+        //     }
+        //}
     };
     $.ajax(settings);
 }
 
-/* function signUpFailure(err){
-    console.error(err);
-        if (onFailure) {
-            onError(err); 
-        };
-} */
 
 function getUserIdeas(options){
     const { jwtToken, onSuccess, onError } = options;
