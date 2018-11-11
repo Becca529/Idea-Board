@@ -7,9 +7,7 @@ const noteScehma = mongoose.Schema ({
 });
 
 const ideaSchema = mongoose.Schema ({
-    userName: {type: mongoose.Schema.Types.ObjectId, ref: 'user'},
-    //need to check out user versus username
-   // userName: { type: String, required: true },
+    user: {type: mongoose.Schema.Types.ObjectId, ref: 'user'},
     title: { type: String, required: true },
     description: { type: String},
     status: {type: String, required: true },
@@ -19,18 +17,20 @@ const ideaSchema = mongoose.Schema ({
 });
 
 
+// Defined an instance of a dog owner and check if user is populated
+// to prevent sensitive info from being displayed
 
 ideaSchema.methods.serialize = function() {
-    let userName;
+    let user;
 
-    if (typeof userName === 'function') {
-      userName = this.userName.serialize();
+    if (typeof user === 'function') {
+      user = this.user.serialize();
     } else {
-      userName = this.userName;
+      user = this.user;
     }
     return {
       id: this._id,
-      userName: userName,
+      user: user,
       title: this.title,
       description: this.description,
       status: this.status,
@@ -41,7 +41,7 @@ ideaSchema.methods.serialize = function() {
 
 // Validate provided data when creating a new idea
 const ideaJoiSchema = Joi.object().keys({
-    userName: Joi.string().optional(),
+    user: Joi.string().optional(),
     title: Joi.string().min(1).trim().required(),
     description: Joi.string().min(1).max(100).trim().allow(''),
     status: Joi.string().min(1).trim().required(),
@@ -50,5 +50,4 @@ const ideaJoiSchema = Joi.object().keys({
   });
   
 const Idea = mongoose.model('idea', ideaSchema);
-
 module.exports = { Idea, ideaJoiSchema };

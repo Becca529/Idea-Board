@@ -1,12 +1,7 @@
 let user = null;
 
-//ACTION FUNCTIONS
-function doLogIn(credentials, success, failure){
-//make function that call sucess or fail - success set user to something
-}
-
-
-function doSignUpUser (newUserData, onSuccess, onError) {
+//ACTION FUNCTIONS//HTTP REQUESTS-------------------------------------------------------------------------
+function doNewUserCreation (newUserData, onSuccess, onError) {
     const settings = { 
             type: 'POST',
             url: '/user',
@@ -23,24 +18,124 @@ function doSignUpUser (newUserData, onSuccess, onError) {
         $.ajax(settings);
     }
 
+function doUserLogIn(credentials, onSuccess, onError){
+    const settings = { 
+            type: 'POST',
+            url: '/auth/login',
+            dataType: 'json',
+            data: JSON.stringify(credentials),
+            success: onSuccess,
+            error: err => {
+                console.error(err);
+                if (onError) {
+                    onError(err);
+                }
+            }
+        };
+        $.ajax(settings);    
+        
+    }
 
-function doLogOut(success, failure){
+function doUserIdeaListRetrival (options){
+    const { jwtToken, onSuccess, onError } = options;
+    $.ajax({
+        type: 'GET',
+        url: '/ideaboard',
+        dataType: 'json',
+        data: undefined,
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', `Bearer ${jwtToken}`);
+        },
+        success: onSuccess,
+        error: err => {
+            console.error(err);
+            if (onError) {
+                onError(err);
+            }
+        }
+    });
+}
+
+
+function doNewIdeaCreation (options){
+    const { jwtToken, newIdea, onSuccess, onError } = options;
+    $.ajax({
+        type: 'POST',
+        url: '/ideaboard',
+        dataType: 'json',
+        data: JSON.stringify(newIdea),
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', `Bearer ${jwtToken}`);
+        },
+        success: onSuccess,
+        error: err => {
+            console.error(err);
+            if (onError) {
+                onError();
+            }
+        }
+    });
+}
+function doSpecificIdeaRetrival (options){
+    const { ideaId, onSuccess } = options;
+    $.getJSON(`/ideaboard/${ideaId}`, onSuccess);
+}
+
+function doIdeaUpdate (options){
+    const {jwtToken, ideaID, newIdea, onSuccess, onError } = options;
+    $.ajax({
+        type: 'PUT',
+        url: `/idea/${ideaId}`,
+        dataType: 'json',
+        data: JSON.stringify(newIdea),
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', `Bearer ${jwtToken}`);
+        },
+        success: onSuccess,
+        error: err => {
+            console.error(err);
+            if (onError) {
+                onError();
+            }
+        }
+    });
+}
+
+function doIdeaDeletion (options){
+    const { ideaId, jwtToken, onSuccess, onError } = options;
+    $.ajax({
+        type: 'delete',
+        url: `/idea/${ideaId}`,
+        dataType: 'json',
+        data: undefined,
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', `Bearer ${jwtToken}`);
+        },
+        success: onSuccess,
+        error: err => {
+            console.error(err);
+            if (onError) {
+                onError(err);
+            }
+        }
+    });
+}
+
+function doUserLogOut(onSuccess, onError){
     
 }
 
-function getLoggedInContent(success, failure){
-    
-}
+//GENERATOR FUNCTIONS-------------------------------------
 
-//GENERATOR FUNCTIONS
-function generateWelcomeText() {
- $('.js-content').html (
-    `<div class= "js-welcome-content">
+function generateWelcomeHTML() {
+ return `
+    <div class= "js-welcome-content">
         <h1>Welcome to Idea Board</h1>
         <h2>A place to create and store your creative juices for ideas and projects</h2>
         <button id="js-show-log-in-form-btn" type="button">Log In</button>
         <p>New user?<button id="js-show-sign-up-form-btn" type="button">Sign up</button></p>
-    </div>`);
+    </div>
+    `
 }
 
 function generateSignUpSuccessHTML() {
@@ -97,16 +192,17 @@ return `
 `
 }
 
-function displayIdeaBoardTitle(){
-    $('.js-content').html(
-    `<div class= "js-idea-board">
+function generateIdeaBoardTitleHTML(){
+  return `
+    <div class= "js-idea-board">
         <div class= "idea-board-header">
             <h1 class="idea-board-title">Idea Board</h1>
             <button class="js-show-new-idea-form-btn">Add New Idea</button>
         </div>
         <div class="js-user-ideas">
         </div>
-  </div>`)
+  </div>
+  `
 }
 
 
@@ -136,7 +232,7 @@ function generateLoggedInNav(){
 $( "logged-in-nav-details" ).toggle();
 }
 
-//DISPLAY FUNCTIONS
+//DISPLAY FUNCTIONS --------------------------------------------------------------------
 function appendOrReplace(data, container, generator, append = true) {
     return append ? $(container).append(generator(data)) : $(container).html(generator(data));
 }
@@ -160,10 +256,12 @@ function displayLoggedInContent(contentData, container, append = false){
 };
 
 function displaySignUpSuccessHTML(contentData, container, append = false){
-    appendOrReplace(contentData, container, generateLoggedInContent, append);
+    appendOrReplace(contentData, container, generateSignUpSuccessHTML, append);
 };
 
-//EVENT HANDLER FUNCTIONS
+//EVENT HANDLER FUNCTIONS -----------------------------------------------
+
+//replace with just one event handler function for all events?
 function handleShowSignUp (){
     $('body').on("click", "#js-show-sign-up-form-btn", (event) => {
         displaySignUpForm($('.js-content'));
@@ -184,8 +282,7 @@ function handleLogInSubmit (){
             password: $('#password-txt').val()
         }
 
-        logInUser(credentials, generateLoggedInContent);
-//error handling? third parameter
+        doUserLogIn(credentials, generateLoggedInContent);
     });
 }
 
@@ -201,127 +298,18 @@ function handleSignUpSubmit (){
             email: $('#email-txt').val()
         }
 
-        doSignUpUser(newUserData, displaySignUpSuccessHTML);
+        doNewUserCreation(newUserData, displaySignUpSuccessHTML);
     });
-    //on failure/error? third parameter?
+   
 }
 
 function handleLogOut (){
   
 }
 
-//HTTP REQUESTS
-
-function logInUser(credentials, onSuccess, onError){
-    const settings = { 
-        type: 'POST',
-        url: '/auth/login',
-        dataType: 'json',
-        data: JSON.stringify(credentials),
-        success: onSuccess,
-        error: err => {
-            console.error(err);
-            if (onError) {
-                onError(err);
-            }
-        }
-    };
-    $.ajax(settings);    
-
-}
 
 
-
-
-function getUserIdeas(options){
-    const { jwtToken, onSuccess, onError } = options;
-    $.ajax({
-        type: 'GET',
-        url: '/ideaboard',
-        dataType: 'json',
-        data: undefined,
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader('Authorization', `Bearer ${jwtToken}`);
-        },
-        success: onSuccess,
-        error: err => {
-            console.error(err);
-            if (onError) {
-                onError(err);
-            }
-        }
-    });
-}
-
-function getIdeabyID(options){
-    const { ideaId, onSuccess } = options;
-    $.getJSON(`/ideaboard/${ideaId}`, onSuccess);
-}
-
-function createNote(options) {
-    const { jwtToken, newIdea, onSuccess, onError } = options;
-
-    $.ajax({
-        type: 'POST',
-        url: '/ideaboard',
-        dataType: 'json',
-        data: JSON.stringify(newIdea),
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader('Authorization', `Bearer ${jwtToken}`);
-        },
-        success: onSuccess,
-        error: err => {
-            console.error(err);
-            if (onError) {
-                onError();
-            }
-        }
-    });
-}
-
-function updateIdea(options) {
-    const {jwtToken, ideaID, newIdea, onSuccess, onError } = options;
-
-    $.ajax({
-        type: 'PUT',
-        url: `/idea/${ideaId}`,
-        dataType: 'json',
-        data: JSON.stringify(newIdea),
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader('Authorization', `Bearer ${jwtToken}`);
-        },
-        success: onSuccess,
-        error: err => {
-            console.error(err);
-            if (onError) {
-                onError();
-            }
-        }
-    });
-}
-
-function deleteIdea(options) {
-    const { ideaId, jwtToken, onSuccess, onError } = options;
-    $.ajax({
-        type: 'delete',
-        url: `/idea/${ideaId}`,
-        dataType: 'json',
-        data: undefined,
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader('Authorization', `Bearer ${jwtToken}`);
-        },
-        success: onSuccess,
-        error: err => {
-            console.error(err);
-            if (onError) {
-                onError(err);
-            }
-        }
-    });
-}
-
-
-
+//combine into one function
 function setUpEventHandlers(){
     handleShowSignUp();
     handleSignUpSubmit();
@@ -331,7 +319,7 @@ function setUpEventHandlers(){
 }
 
 function initializeUI(){
-    generateWelcomeText();
+    displayWelcomeHTML();
     setUpEventHandlers();
 }
 

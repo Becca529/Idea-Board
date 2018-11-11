@@ -25,7 +25,7 @@ app.use(express.static('./public'));
 
 //Routers
 app.use('/user', userRouter); // Redirects all calls to /api/user to userRouter.
-app.use('/board', ideaRouter); // Redirects all calls to /board to ideaRouter.
+app.use('/idea', ideaRouter); // Redirects all calls to /board to ideaRouter.
 app.use('/auth', authRouter); // Redirects all calls to /user to userRouter.
 
 
@@ -33,9 +33,6 @@ app.use('/auth', authRouter); // Redirects all calls to /user to userRouter.
 app.use('*', function (req, res) {
   res.status(404).json({ error: 'Not Found.' });
 });
-
-
-module.exports = { app, startServer, stopServer };
 
 //Connect to MongoDB database and start expressJS server
 function startServer(dataBaseUrl = DATABASE_URL, port = PORT) {
