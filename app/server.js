@@ -24,9 +24,9 @@ app.use(express.json());
 app.use(express.static('./public')); 
 
 //Routers
-app.use('/user', userRouter); // Redirects all calls to /api/user to userRouter.
-app.use('/idea', ideaRouter); // Redirects all calls to /board to ideaRouter.
-app.use('/auth', authRouter); // Redirects all calls to /user to userRouter.
+app.use('/api/user', userRouter); // Redirects all calls to /api/user to userRouter.
+app.use('/api/idea', ideaRouter); // Redirects all calls to /idea to ideaRouter.
+app.use('/api/auth', authRouter); // Redirects all calls to /user to userRouter.
 
 
 //For unhandled HTTP requests - return 404 not found error

@@ -13,7 +13,7 @@ const ideaSchema = mongoose.Schema ({
     status: {type: String, required: true },
     likability: {type: Number} ,
     createDate: { type: Date, default: Date.now },
-    notes: [noteScehma]
+    //notes: [noteScehma]
 });
 
 
@@ -35,7 +35,7 @@ ideaSchema.methods.serialize = function() {
       description: this.description,
       status: this.status,
       likability: this.likability,
-      notes: this.notes
+      //notes: this.notes
     };
   };
 

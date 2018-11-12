@@ -56,7 +56,7 @@ ideaRouter.put('/:ideaid', jwtPassportMiddleware, (req, res) => {
     description: req.body.description,
     status: req.body.status,
     likability: req.body.likeability,
-    notes: req.body.notes
+    //notes: req.body.notes
   };
 
   // Checks that all provided data passes all schema requirements
