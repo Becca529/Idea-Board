@@ -38,12 +38,13 @@ app.use('*', function (req, res) {
 function startServer(dataBaseUrl = DATABASE_URL, port = PORT) {
   return new Promise((resolve, reject) => {
     //Connect to database
-    mongoose.connect(dataBaseUrl, { useNewUrlParser: true }, err => {
+    mongoose.connect(dataBaseUrl, { useMongoClient: true }, err => {
           if (err) {
               //If error connecting to database - print out error to console and reject promise
               console.error(err);
               return reject(err);
           } else {
+              console.log("mongo connected")
               //If database connect successful - Start Express server
               server = app.listen(port, () => {
                   //If expressJS server start successfull - print success msg to console and resolve promise

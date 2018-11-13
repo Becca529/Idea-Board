@@ -45,6 +45,7 @@ userRouter.post('/', (req, res) => {
                 //if error with creating new user - return HTTP status code and error
                 console.error(err);
                 return res.status(500).json({error: err.message});
+                console.log("catch all");
             });
     });
 });

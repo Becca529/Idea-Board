@@ -5,7 +5,7 @@ const Joi = require('joi');
 const ideaRouter = express.Router();
 
 const { Idea , ideaJoiSchema } = require('./idea.model.js');
-const { jwtPassportMiddleware } = require('../auth/strategy');
+const { jwtPassportMiddleware } = require('../auth/auth.strategy');
 
 // Retrieve a specific user's idea
 ideaRouter.get('/', jwtPassportMiddleware, (req, res) => {
@@ -76,7 +76,7 @@ ideaRouter.put('/:ideaid', jwtPassportMiddleware, (req, res) => {
 });
 
 // Retrieve user ideas
-ideaRouter.get('/board', jwtPassportMiddleware, (req, res) => {
+ideaRouter.get('/', jwtPassportMiddleware, (req, res) => {
   Idea.find({ user: req.user.id })
     .populate('user')
     .then(ideas => {
