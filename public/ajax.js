@@ -1,20 +1,20 @@
 //ACTION FUNCTIONS
 //HTTP REQUESTS
 //creates new user through POST /api/user endpoint
-function doNewUserCreation (newUserData, onSuccess) {
+function doNewUserCreation (newUserData, onSuccess, onError) {
     const settings = { 
             type: 'POST',
             url: '/api/user',
             contentType: 'application/json',
             dataType: 'json',
             data: JSON.stringify(newUserData),
-            success: onSuccess
-            //error: err => {
-              //   console.error(err);
-               //  if (onError) {
-                //     onError(err);
-                // }
-            //}
+            success: onSuccess,
+            error: err => {
+               console.error(err);
+                 if (onError) {
+                     onError(err);
+                 }
+             }
         };
         $.ajax(settings);
     }
@@ -30,7 +30,7 @@ function doUserLogIn(credentials, onSuccess, onError){
             success: response => {
                 user = response.authToken
                 if (onSuccess){
-                    onSucess(response)
+                    onSuccess(response)
                 }
             },
             error: err => {
@@ -45,7 +45,7 @@ function doUserLogIn(credentials, onSuccess, onError){
 
 //Retrieves logged in user's ideas using GET /api/idea/ endpoint    
 function getIdeas (options){
-    const { jwToken, onSuccess, onError } = options;
+    const { jwToken, onSuccess} = options;
     $.ajax({
         type: 'GET',
         url: '/api/idea',
@@ -55,12 +55,12 @@ function getIdeas (options){
             'Authorization': `Bearer ${jwToken}`
         },
         success: onSuccess,
-        error: err => {
-            console.error(err);
-            if (onError) {
-                onError(err);
-            }
-        }
+        //error: err => {
+           // console.error(err);
+            //if (onError) {
+                //onError(err);
+            //}
+       // }
     });
 }
 

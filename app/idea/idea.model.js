@@ -45,7 +45,8 @@ const ideaJoiSchema = Joi.object().keys({
     title: Joi.string().min(1).trim().required(),
     description: Joi.string().min(1).max(100).trim().allow(''),
     status: Joi.string().min(1).trim().required(),
-    likeability: Joi.string().trim(),
+    likability: Joi.string().trim(),
+    createDate: Joi.date().optional()
     //notes: Joi.string().trim().required(),
   });
   

@@ -8,11 +8,11 @@ const userRouter = express.Router();
 //Creates new user
 userRouter.post('/', (req, res) => {
     const newUser = {
-        firstname: request.body.firstname,
-        lastname: request.body.lastname,
-        email: request.body.email,
-        username: request.body.username,
-        password: request.body.password
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        email: req.body.email,
+        username: req.body.username,
+        password: req.body.password
     };
 
     //Validate new user information against joi schema
@@ -29,7 +29,7 @@ userRouter.post('/', (req, res) => {
     }).then(user => {
         if (user) {
             //if existing email or username found - return status code and error message
-            return response.status(400).json({ error: 'Database Error: A user with that username and/or email already exists.' });
+            return res.status(400).json({ error: 'Database Error: A user with that username and/or email already exists.' });
         }
     //If no username/email conflict - hash entered password
         return User.hashPassword(newUser.password);

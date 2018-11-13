@@ -73,7 +73,6 @@ function handleLogInSubmit (){
 function handleSignUpSubmit (){
     $('body').on("submit", "#form-sign-up", (event) => {
         event.preventDefault();
-        
         const newUserData = {
             username: $('#username-txt').val(),
             password: $('#password-txt').val(),
@@ -81,8 +80,13 @@ function handleSignUpSubmit (){
             lastName: $('#last-name-txt').val(),
             email: $('#email-txt').val()
         }
-console.log(JSON.parse(JSON.stringify(newUserData)));
-        doNewUserCreation(newUserData, displaySignUpSuccessHTML);
+        console.log(JSON.parse(JSON.stringify(newUserData)));
+
+        doNewUserCreation({newUserData, displaySignUpSuccessHTML, 
+            onError: err => {
+            alert('There was a problem accessing your request, please try again later.');
+            }
+        });
     });
    
 }

@@ -4,11 +4,16 @@ const express = require("express");
 const Joi = require('joi');
 const ideaRouter = express.Router();
 
+const bodyParser = require('body-parser');
+
+const jsonParser = bodyParser.json();
+
 const { Idea , ideaJoiSchema } = require('./idea.model.js');
-const { jwtPassportMiddleware } = require('../auth/auth.strategy');
+//const { jwtPassportMiddleware } = require('../auth/auth.strategy');
+
 
 // Retrieve a specific user's idea
-ideaRouter.get('/', jwtPassportMiddleware, (req, res) => {
+ideaRouter.get('/', jsonParser, (req, res) => {
   Idea.find({ user: req.user.id })
     .populate('user')
     .then(ideas => {
@@ -23,7 +28,7 @@ ideaRouter.get('/', jwtPassportMiddleware, (req, res) => {
 
 
 //Create a new idea 
-ideaRouter.post('/', jwtPassportMiddleware, (req, res) => {
+ideaRouter.post('/', jsonParser, (req, res) => {
   const newIdea = {
     user: req.user.id,
     title: req.body.title,
@@ -50,7 +55,7 @@ ideaRouter.post('/', jwtPassportMiddleware, (req, res) => {
 });
     
 // Update idea by id
-ideaRouter.put('/:ideaid', jwtPassportMiddleware, (req, res) => {
+ideaRouter.put('/:ideaid', jsonParser, (req, res) => {
   const ideaUpdate = {
     title: req.body.title,
     description: req.body.description,
@@ -76,7 +81,7 @@ ideaRouter.put('/:ideaid', jwtPassportMiddleware, (req, res) => {
 });
 
 // Retrieve user ideas
-ideaRouter.get('/', jwtPassportMiddleware, (req, res) => {
+ideaRouter.get('/', jsonParser, (req, res) => {
   Idea.find({ user: req.user.id })
     .populate('user')
     .then(ideas => {
@@ -116,7 +121,7 @@ ideaRouter.get('/:ideaid', (req, res) => {
 });
 
   // Remove idea by id
-ideaRouter.delete('/:ideaid', jwtPassportMiddleware, (req, res) => {
+ideaRouter.delete('/:ideaid', jsonParser, (req, res) => {
   Idea.findByIdAndDelete(req.params.ideaid)
     .then(() => {
       return res.status(204).end();

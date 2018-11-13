@@ -7,12 +7,23 @@ const passport = require('passport');
 
 const {DATABASE_URL, PORT} = require('./config');
 const { userRouter } = require('./user/user.router');
-const { ideaRouter } = require("./idea/idea.router");
+const { ideaRouter } = require('./idea/idea.router');
 const { authRouter } = require('./auth/auth.router');
 const { localStrategy, jwtStrategy } = require('./auth/auth.strategy');
 
 const app = express();
 let server;
+
+// CORS
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE');
+    if (req.method === 'OPTIONS') {
+      return res.send(204);
+    }
+    next();
+  });
 
 //Configure passport to use local/jsonweb token strategies for authetentation 
 passport.use(localStrategy);
@@ -28,17 +39,25 @@ app.use('/api/user', userRouter); // Redirects all calls to /api/user to userRou
 app.use('/api/idea', ideaRouter); // Redirects all calls to /idea to ideaRouter.
 app.use('/api/auth', authRouter); // Redirects all calls to /user to userRouter.
 
+const jwtAuth = passport.authenticate('jwt', { session: false });
+
 
 //For unhandled HTTP requests - return 404 not found error
 app.use('*', function (req, res) {
   res.status(404).json({ error: 'Not Found.' });
 });
 
+app.get('/api/protected', jwtAuth, (req, res) => {
+    return res.json({
+      data: 'rosebud'
+    });
+  });
+
 //Connect to MongoDB database and start expressJS server
 function startServer(dataBaseUrl = DATABASE_URL, port = PORT) {
   return new Promise((resolve, reject) => {
     //Connect to database
-    mongoose.connect(dataBaseUrl, { useMongoClient: true }, err => {
+    mongoose.connect(dataBaseUrl, { useNewUrlParser: true }, err => {
           if (err) {
               //If error connecting to database - print out error to console and reject promise
               console.error(err);
