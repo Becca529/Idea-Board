@@ -9,12 +9,7 @@ function doNewUserCreation (newUserData, onSuccess, onError) {
             dataType: 'json',
             data: JSON.stringify(newUserData),
             success: onSuccess,
-            error: err => {
-               console.error(err);
-                 if (onError) {
-                     onError(err);
-                 }
-             }
+            error: onError
         };
         $.ajax(settings);
     }
@@ -28,9 +23,9 @@ function doUserLogIn(credentials, onSuccess, onError){
             dataType: 'json',
             data: JSON.stringify(credentials),
             success: response => {
-                user = response.authToken
+                user = response.authToken;
                 if (onSuccess){
-                    onSuccess(response)
+                   onSuccess(response)
                 }
             },
             error: err => {
@@ -55,12 +50,9 @@ function getIdeas (options){
             'Authorization': `Bearer ${jwToken}`
         },
         success: onSuccess,
-        //error: err => {
-           // console.error(err);
-            //if (onError) {
-                //onError(err);
-            //}
-       // }
+        error: err => {
+           console.error(err);
+        }
     });
 }
 
@@ -140,10 +132,11 @@ function doUserLogOut(onSuccess, onError){
 }
 
 function getAndDisplayIdeas(){
+    console.log("getting to getAndDisplay")
    const success = response => {
        displayLoggedInContent( response, $('.js-user-ideas'), false);
    }
-    const options = {jwToken: user, onSuccess: success}
+    const options = {jwToken: user, onSuccess: success};
     getIdeas(options);
 }
 

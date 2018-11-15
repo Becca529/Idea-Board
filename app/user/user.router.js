@@ -8,11 +8,11 @@ const userRouter = express.Router();
 //Creates new user
 userRouter.post('/', (req, res) => {
     const newUser = {
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        email: req.body.email,
-        username: req.body.username,
-        password: req.body.password
+        firstname: req.body.newUserData.firstName,
+        lastname: req.body.newUserData.lastName,
+        email: req.body.newUserData.email,
+        username: req.body.newUserData.username,
+        password: req.body.newUserData.password
     };
 
     //Validate new user information against joi schema
@@ -45,7 +45,6 @@ userRouter.post('/', (req, res) => {
                 //if error with creating new user - return HTTP status code and error
                 console.error(err);
                 return res.status(500).json({error: err.message});
-                console.log("catch all");
             });
     });
 });

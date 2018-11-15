@@ -82,9 +82,11 @@ function handleSignUpSubmit (){
         }
         console.log(JSON.parse(JSON.stringify(newUserData)));
 
-        doNewUserCreation({newUserData, displaySignUpSuccessHTML, 
+        doNewUserCreation({
+            newUserData, 
+            onSuccess: displaySignUpSuccessHTML('.js-content'),
             onError: err => {
-            alert('There was a problem accessing your request, please try again later.');
+                alert('There was a problem accessing your request, please try again later.');
             }
         });
     });

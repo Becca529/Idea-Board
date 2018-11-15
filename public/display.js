@@ -28,8 +28,9 @@ function displayLoggedInContent(contentData, container, append = false){
     appendOrReplace(contentData, container, generateLoggedInContent, append);
 };
 
-function displaySignUpSuccessHTML(contentData, container, append = false){
-    appendOrReplace(contentData, container, generateSignUpSuccessHTML, append);
+function displaySignUpSuccessHTML(container, append = false){
+    console.log("hello-displayfunction");
+    appendOrReplace(null, container, generateSignUpSuccessHTML, append);
 };
 
 function displayIdeaDetails (ideaDetails, container, append = false){

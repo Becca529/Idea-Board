@@ -12,7 +12,7 @@ const { Idea , ideaJoiSchema } = require('./idea.model.js');
 //const { jwtPassportMiddleware } = require('../auth/auth.strategy');
 
 
-// Retrieve a specific user's idea
+// Retrieve user ideas
 ideaRouter.get('/', jsonParser, (req, res) => {
   Idea.find({ user: req.user.id })
     .populate('user')
