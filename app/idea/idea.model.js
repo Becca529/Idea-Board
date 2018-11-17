@@ -35,6 +35,7 @@ ideaSchema.methods.serialize = function() {
       description: this.description,
       status: this.status,
       likability: this.likability,
+      createDate: this.createDate
       //notes: this.notes
     };
   };

@@ -38,7 +38,7 @@ const UserJoiSchema = Joi.object().keys({
     firstname: Joi.string().min(1).trim().required(),
     lastname: Joi.string().min(1).trim().required(),
     username: Joi.string().alphanum().min(4).max(30).trim().required(),
-    password: Joi.string().min(8).max(30).trim().required(),
+    password: Joi.string().min(6).max(30).trim().required(),
     email: Joi.string().email().trim().required()
 });
 

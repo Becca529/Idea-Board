@@ -9,7 +9,12 @@ function doNewUserCreation (newUserData, onSuccess, onError) {
             dataType: 'json',
             data: JSON.stringify(newUserData),
             success: onSuccess,
-            error: onError
+            error: err => {
+                console.error(err);
+                if (onError) {
+                    onError(err);
+                }
+            }
         };
         $.ajax(settings);
     }
@@ -24,6 +29,7 @@ function doUserLogIn(credentials, onSuccess, onError){
             data: JSON.stringify(credentials),
             success: response => {
                 user = response.authToken;
+                username = response.username;
                 if (onSuccess){
                    onSuccess(response)
                 }
@@ -79,19 +85,33 @@ function createNewIdea (options){
 }
 //Retrieves specific user idea details using GET /api/idea/:ideaid endpoint
 function getIdeaDetails (options){
-    const {ideaId, onSuccess } = options;
-    $.getJSON(`/idea/${ideaId}`, onSuccess);
+    //const {jwToken, ideaID, onSuccess } = options;
+    //$.getJSON(`/idea/${ideaID}`, onSuccess);
+    const { jwToken, ideaID, onSuccess} = options;
+    $.ajax({
+        type: 'GET',
+        url: `/api/idea/${ideaID}`,
+        contentType: 'application/json',
+        dataType: 'json',
+        headers: {
+            'Authorization': `Bearer ${jwToken}`
+        },
+        success: onSuccess,
+        error: err => {
+           console.error(err);
+        }
+    });
 }
 
 //Update specific user idea using PUT /api/idea/:ideaid endpoint
 function updateIdea (options){
-    const {jwToken, ideaId, newIdea, onSuccess, onError } = options;
+    const {jwToken, ideaID, updatedIdea, onSuccess, onError } = options;
     $.ajax({
         type: 'PUT',
-        url: `/api/idea/${ideaId}`,
+        url: `/api/idea/${ideaID}`,
         contentType: 'application/json',
         dataType: 'json',
-        data: JSON.stringify(newIdea),
+        data: JSON.stringify(updatedIdea),
         headers: {
             'Authorization': `Bearer ${jwToken}`
         },
@@ -107,10 +127,10 @@ function updateIdea (options){
 
 //Deletes specific user idea using DELETE /api/idea/:ideaid endpoint
 function deleteIdea (options){
-    const { jwToken, ideaId, onSuccess, onError } = options;
+    const { jwToken, ideaID, onSuccess, onError } = options;
     $.ajax({
         type: 'DELETE',
-        url: `/api/idea/${ideaId}`,
+        url: `/api/idea/${ideaID}`,
         contentType: 'application/json',
         dataType: 'json',
         data: undefined,
@@ -127,17 +147,17 @@ function deleteIdea (options){
     });
 }
 
-function doUserLogOut(onSuccess, onError){
-    
-}
 
 function getAndDisplayIdeas(){
-    console.log("getting to getAndDisplay")
-   const success = response => {
-       displayLoggedInContent( response, $('.js-user-ideas'), false);
+    const success = response => {
+       displayLoggedInContent(response, ('.js-user-ideas'), false);
    }
     const options = {jwToken: user, onSuccess: success};
     getIdeas(options);
+    displayIdeaBoardTitle(null, '.js-content');
+    displayNav(username, ('nav'));
+    
 }
+
 
 

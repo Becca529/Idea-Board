@@ -7,13 +7,18 @@ const ideaRouter = express.Router();
 const bodyParser = require('body-parser');
 
 const jsonParser = bodyParser.json();
+const passport = require('passport');
 
 const { Idea , ideaJoiSchema } = require('./idea.model.js');
-//const { jwtPassportMiddleware } = require('../auth/auth.strategy');
+const { jwtStrategy } = require('../auth/auth.strategy');
+
+passport.use(jwtStrategy);
+const jwtAuth = passport.authenticate('jwt', { session: false });
 
 
 // Retrieve user ideas
-ideaRouter.get('/', jsonParser, (req, res) => {
+ideaRouter.get('/', jsonParser, jwtAuth, (req, res) => {
+  console.log(req.user);
   Idea.find({ user: req.user.id })
     .populate('user')
     .then(ideas => {
@@ -28,14 +33,14 @@ ideaRouter.get('/', jsonParser, (req, res) => {
 
 
 //Create a new idea 
-ideaRouter.post('/', jsonParser, (req, res) => {
+ideaRouter.post('/', jsonParser, jwtAuth, (req, res) => {
+  console.log(req.user);
   const newIdea = {
     user: req.user.id,
     title: req.body.title,
     description: req.body.description,
     status: req.body.status,
     likability: req.body.likeability,
-    notes: req.body.notes,
   };
   
    // Checks that all provided data passes all schema requirements
@@ -55,24 +60,27 @@ ideaRouter.post('/', jsonParser, (req, res) => {
 });
     
 // Update idea by id
-ideaRouter.put('/:ideaid', jsonParser, (req, res) => {
-  const ideaUpdate = {
+ideaRouter.put('/:ideaid', jsonParser, jwtAuth, (req, res) => {
+  console.log("made it to put router");
+  const updatedIdea = {
+    //id: req.body.ideaID,
     title: req.body.title,
     description: req.body.description,
     status: req.body.status,
-    likability: req.body.likeability,
+    likability: req.body.likability,
     //notes: req.body.notes
   };
-
+console.log(updatedIdea);
   // Checks that all provided data passes all schema requirements
-  const validation = Joi.validate(ideaUpdate, ideaJoiSchema);
+  const validation = Joi.validate(updatedIdea, ideaJoiSchema);
   if (validation.error) {
     return res.status(400).json({ error: validation.error });
   }
 
   // Looks for idea by id, if found, updates info
-  Idea.findByIdAndUpdate(req.params.ideaid, ideaUpdate)
+  Idea.findByIdAndUpdate(req.para, updatedIdea)
     .then(() => {
+      console.log(req.params.id, "found-id");
       return res.status(204).end();
     })
     .catch(err => {
@@ -109,14 +117,15 @@ ideaRouter.get('/all', (req, res) => {
 });
 
 // Retrieve one idea by id
-ideaRouter.get('/:ideaid', (req, res) => {
-  Idea.findById(req.params.ideaid)
+ideaRouter.get('/:ideaID', jsonParser, (req, res) => {
+  Idea.findById(req.params.ideaID)
     .populate('user')
-    .then(owner => {
+    .then(idea => {
       return res.status(200).json(idea.serialize());
     })
     .catch(err => {
       return res.status(500).json(err);
+      
     });
 });
 

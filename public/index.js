@@ -1,4 +1,5 @@
 let user = null;
+let username = null;
 
 function initializeUI(){
     displayWelcomeHTML('.js-content');

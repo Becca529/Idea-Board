@@ -32,7 +32,7 @@ function generateWelcomeHTML() {
                <li><label for="password-txt">
                    Password: <input id="password-txt" type="password" required>
                </label></li>
-               <li><input type="submit" value="Sign In"></li>
+               <li><input type="submit" value="Sign In"><button class="primary-button cancel-btn" value="cancel">Cancel</button></li>
                </ul>
            </fieldset>
        </form>
@@ -58,7 +58,7 @@ function generateWelcomeHTML() {
            <li><label for="password-txt">
                Password: <input id="password-txt" type="password" required>
            </label></li>
-           <li><button type="submit" class="primary-button form-sign-up-button" value="submit">Submit</button></li>
+           <li><button type="submit" class="primary-button form-sign-up-button" value="submit">Submit</button><button type="cancel" class="primary-button cancel-btn" value="cancel">Cancel</button></li>
            </ul>
        </fieldset>
    </form>
@@ -83,8 +83,7 @@ function generateWelcomeHTML() {
       <li class = "idea-summary-box">
        <ul class = "idea-summary">
             <li class="idea-title">${idea.title}</li>
-            <li class="idea-status">${idea.status}</li>
-            <li class="idea-likeability">${idea.likability}</li>
+            <li class="idea-status">Status: ${idea.status}</li>
        </ul>
        <button class="js-show-idea-details-btn" data-id="${idea.id}">View Details/Edit</button>
        </li>
@@ -92,19 +91,15 @@ function generateWelcomeHTML() {
    }
    
   function generateNav(state){
-   return `
+    return `
    <div class = "home-link">
     <a href="index.html"><img src="" class="icon-img" alt="home-link"></a>
     </div> 
-    <ul class="logged-in-nav-details">
-    <li>Welcome: <span class="acount-name">${user.firstname}</span></li>
-    <li><button id="js-log-out-btn" type="button">Log Out</button></li>
-    </ul>
-   
+    ${state ? `<ul class="logged-in-nav-details">
+    <li>Welcome: <span class="acount-name">${state}</span></li>
+    <li><button class="js-log-out-btn" type="button">Log Out</button></li>
+    </ul>`: ""}
    `
-    //add user name and log out button to nav bar
-
-   //$( "logged-in-nav-details" ).toggle();
    } 
    
    function generateIdeaDetails(idea) {
@@ -116,24 +111,25 @@ function generateWelcomeHTML() {
              <li class="idea-likeability">${idea.likability}</li>
              <li class="idea-description">${idea.description}</li>
         </ul>
-        <button id="js-show-edit-idea-form-btn">Edit</button>
-        <button id="js-delete-idea-btn">Delete</button>
+        <button class="js-show-edit-idea-form-btn" data-id="${idea.id}">Edit</button>
+        <button id="js-delete-idea-btn" data-id="${idea.id}">Delete</button>
+        <button class="cancel-btn" value="cancel">Cancel</button>
         </div>
        `
     }
    //review how to review and display data in different type of inputs ie status button radio button, text (placeholder or value or selected)
     function generateEditableIdeaForm(idea){
        return `
-       <form id="form-update-idea" method="put">
+       <form id="form-update-idea" method="put" data-id="${idea.id}">
            <fieldset>
                <legend>Update Idea Details</legend>
                <ul>   
               <li><label for="title-txt">
-                   First Name: <input id="title-txt" type="text" required placeholder="${idea.title}"></label></li>
+                   Title: <input id="title-txt" type="text" required value="${idea.title}"></label></li>
                <li><label for="description-txt">
-                   Description: <input id="description-txt" type="text" placeholder="${idea.description}"></label></li>
-               <li><label for="status-select">
-                   Status: <select name ="status-options" id="status-select" class="form-field" required selected="${idea.status}"> 
+                   Description: <input id="description-txt" type="text" value="${idea.description}"></label></li>
+                   <li><label for="status-select">
+                   Status: <select name ="status-options" id="status-selector" class="form-field" required> 
                    <option value="not-started">Not Started</option>
                    <option value="planning">Planning</option>
                    <option value="in-progress">In Progress</option>
@@ -142,16 +138,16 @@ function generateWelcomeHTML() {
                  </select> 
                </label></li>
                <li><label for="likability-radio">
-                   Likability:  <fieldset id="likability-radio" selected="${idea.likability}">
-                   <input type="radio" id="star3" name="rating" value="3" title="Love"> 
+                   Likability:  <fieldset id="likability-radio">
+                   <input type="radio" id="star3" name="likability-rating" value="3" title="Love"> 
                    <label for="star-3"></label>
-                   <input type="radio" id="star2" name="rating" value="2" title="Like">
+                   <input type="radio" id="star2" name="likability-rating" value="2" title="Like">
                    <label for="star-2"></label>
-                   <input type="radio" id="star1" name="rating" value="1" title="Eh">
+                   <input type="radio" id="star1" name="likability-rating" value="1" title="Eh">
                    <label for="star-1"></label>
                    </fieldset>
                </label></li>
-               <li><button type="submit" class="primary-button" value="submit">Update</button><button type="cancel" class="primary-button" value="cancel">Cancel</button></li>
+                   <li><button type="submit" class="primary-button" value="submit">Update</button><button type="cancel" class="primary-button cancel-btn" value="cancel">Cancel</button></li>
                </ul>
            </fieldset>
        </form>
@@ -162,14 +158,14 @@ function generateWelcomeHTML() {
        return `
        <form id="form-new-idea" method="post">
            <fieldset>
-               <legend>Update Idea Details</legend>
+               <legend>Add New Idea</legend>
                <ul>   
               <li><label for="title-txt">
-                   First Name: <input id="title-txt" type="text" required></label></li>
+                   Title: <input id="title-txt" type="text" required></label></li>
                <li><label for="description-txt">
                    Description: <input id="description-txt" type="text"></label></li>
                <li><label for="status-select">
-                   Status: <select name ="status-options" id="status-select" class="form-field" required> 
+                   Status: <select name ="status-options" id="status-selector" class="form-field" required> 
                    <option value="not-started">Not Started</option>
                    <option value="planning">Planning</option>
                    <option value="in-progress">In Progress</option>
@@ -179,15 +175,15 @@ function generateWelcomeHTML() {
                </label></li>
                <li><label for="likability-radio">
                    Likability:  <fieldset id="likability-radio">
-                   <input type="radio" id="star3" name="rating" value="3" title="Love"> 
+                   <input type="radio" id="star3" name="likability-rating" value="3" title="Love"> 
                    <label for="star-3"></label>
-                   <input type="radio" id="star2" name="rating" value="2" title="Like">
+                   <input type="radio" id="star2" name="likability-rating" value="2" title="Like">
                    <label for="star-2"></label>
-                   <input type="radio" id="star1" name="rating" value="1" title="Eh">
+                   <input type="radio" id="star1" name="likability-rating" value="1" title="Eh">
                    <label for="star-1"></label>
                    </fieldset>
                </label></li>
-               <li><button type="submit" class="primary-button" value="submit">Submit</button><button type="cancel" class="primary-button" value="cancel">Cancel</button></li>
+               <li><button type="submit" class="primary-button" value="submit">Submit</button><button type="cancel" class="primary-button cancel-btn" value="cancel">Cancel</button></li>
                </ul>
            </fieldset>
        </form>

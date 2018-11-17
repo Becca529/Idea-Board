@@ -39,7 +39,6 @@ app.use('/api/user', userRouter); // Redirects all calls to /api/user to userRou
 app.use('/api/idea', ideaRouter); // Redirects all calls to /idea to ideaRouter.
 app.use('/api/auth', authRouter); // Redirects all calls to /user to userRouter.
 
-const jwtAuth = passport.authenticate('jwt', { session: false });
 
 
 //For unhandled HTTP requests - return 404 not found error
@@ -47,11 +46,7 @@ app.use('*', function (req, res) {
   res.status(404).json({ error: 'Not Found.' });
 });
 
-app.get('/api/protected', jwtAuth, (req, res) => {
-    return res.json({
-      data: 'rosebud'
-    });
-  });
+
 
 //Connect to MongoDB database and start expressJS server
 function startServer(dataBaseUrl = DATABASE_URL, port = PORT) {

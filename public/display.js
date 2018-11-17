@@ -24,23 +24,22 @@ function displaySignUpForm(container, append = false){
 }
 
 function displayLoggedInContent(contentData, container, append = false){
-    //displayNav();
     appendOrReplace(contentData, container, generateLoggedInContent, append);
 };
 
 function displaySignUpSuccessHTML(container, append = false){
-    console.log("hello-displayfunction");
     appendOrReplace(null, container, generateSignUpSuccessHTML, append);
 };
 
-function displayIdeaDetails (ideaDetails, container, append = false){
-    appendOrReplace(ideaDetails, container, generateIdeaDetails, append);
+function displayIdeaDetails (idea, container, append = false){
+    appendOrReplace(idea, container, generateIdeaDetails, append);
 };
 
-function displayEditableIdeaForm (ideaDetails, container, append = false){
-    appendOrReplace(ideaDetails, container, generateEditableIdeaForm, append);
+function displayEditableIdeaForm (idea, container, append = false){
+    appendOrReplace(idea, container, generateEditableIdeaForm, append);
+
 };
 
 function displayNewIdeaForm (container, append = false){
-    appendOrReplace(container, generateNewIdeaForm, append);
+    appendOrReplace(null, container, generateNewIdeaForm, append);
 };
