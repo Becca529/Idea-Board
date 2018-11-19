@@ -61,9 +61,7 @@ ideaRouter.post('/', jsonParser, jwtAuth, (req, res) => {
     
 // Update idea by id
 ideaRouter.put('/:ideaid', jsonParser, jwtAuth, (req, res) => {
-  console.log("made it to put router");
   const updatedIdea = {
-    //id: req.body.ideaID,
     title: req.body.title,
     description: req.body.description,
     status: req.body.status,
@@ -78,9 +76,8 @@ console.log(updatedIdea);
   }
 
   // Looks for idea by id, if found, updates info
-  Idea.findByIdAndUpdate(req.para, updatedIdea)
+  Idea.findByIdAndUpdate(req.params.ideaid, updatedIdea)
     .then(() => {
-      console.log(req.params.id, "found-id");
       return res.status(204).end();
     })
     .catch(err => {

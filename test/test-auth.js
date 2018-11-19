@@ -3,17 +3,17 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const jsonwebtoken = require('jsonwebtoken');
 const faker = require('faker');
-const { app, runServer, closeServer } = require('../app/server');
-const { User } = require('../app/user/model');
-const { TEST_DATABASE_URL, JWT_SECRET, JWT_EXPIRY } = require('../app/config');
+const { app, startServer, stopServer } = require('../app/server');
+const { User } = require('../app/user/user.model');
+const { DATABASE_URL, JWT_SECRET, JWT_EXPIRY } = require('../app/config');
 const expect = chai.expect;
 chai.use(chaiHttp);
 
 describe('tests for /api/auth', function() {
-  let testUser, jwtToken;
+  let testUser, jwToken;
 
   before(function() {
-    return runServer(TEST_DATABASE_URL);
+    return startServer(DATABASE_URL);
   });
 
   beforeEach(function() {
@@ -23,18 +23,20 @@ describe('tests for /api/auth', function() {
       return User.create({
         firstName: testUser.firstName,
         lastName: testUser.lastName,
+        email: testUser.email,
         username: testUser.username,
         password: hashedPassword
       })
       .then(createdUser => {
         testUser.id = createdUser.id;
 
-        jwtToken = jsonwebtoken.sign(
+        jwToken = jsonwebtoken.sign(
           {
             user: {
               id: testUser.id,
               firstName: testUser.firstName,
               lastName: testUser.lastName,
+              email: testUser.email,
               username: testUser.username
             }
           },
@@ -66,7 +68,7 @@ describe('tests for /api/auth', function() {
   });
 
   after(function() {
-    return closeServer();
+    return stopServer();
   });
 
   describe('POST', function() {
@@ -81,7 +83,7 @@ describe('tests for /api/auth', function() {
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.be.an('object');
-          const payload = jsonwebtoken.verify(res.body.jwtToken, JWT_SECRET, {
+          const payload = jsonwebtoken.verify(res.body.jwToken, JWT_SECRET, {
             algorithm: ['HS256']
           });
           expect(payload.user).to.be.an('object');
@@ -89,18 +91,18 @@ describe('tests for /api/auth', function() {
     });
 
     it('should return a valid auth token with a newer expiry date', function() {
-      const firstJwtPayload = jsonwebtoken.verify(jwtToken, JWT_SECRET, {
+      const firstJwtPayload = jsonwebtoken.verify(jwToken, JWT_SECRET, {
         algorithm: ['HS256']
       });
       return chai.request(app)
         .post('/api/auth/refresh')
-        .set('Authorization', `Bearer ${jwtToken}`)
+        .set('Authorization', `Bearer ${jwToken}`)
         .then(res => {
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.be.an('object');
 
-          const newJwtPayload = jsonwebtoken.verify(res.body.jwtToken, JWT_SECRET, {
+          const newJwtPayload = jsonwebtoken.verify(res.body.jwToken, JWT_SECRET, {
             algorithm: ['HS256']
           });
           expect(newJwtPayload.user).to.be.an('object');
@@ -114,6 +116,7 @@ describe('tests for /api/auth', function() {
       firstName: `${faker.name.firstName()}`,
       lastName: `${faker.name.lastName()}`,
       username: `${faker.internet.userName()}`,
+      email: `${faker.internet.email()}`,
       password: `${faker.internet.password()}`
     };
   }

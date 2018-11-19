@@ -6,8 +6,8 @@ function generateWelcomeHTML() {
            <h1>Welcome to Idea Board</h1>
            <h2>A place to create and store your creative juices for ideas and projects</h2>
            <button class="js-show-log-in-form-btn" type="button">Log In</button>
-           <p>New user?<button id="js-show-sign-up-form-btn" type="button">Sign up</button></p>
        </div>
+       <p class="sign-up-text ">New user?<button id="js-show-sign-up-form-btn" type="button">Sign up</button></p>
        `
    }
    
@@ -32,7 +32,7 @@ function generateWelcomeHTML() {
                <li><label for="password-txt">
                    Password: <input id="password-txt" type="password" required>
                </label></li>
-               <li><input type="submit" value="Sign In"><button class="primary-button cancel-btn" value="cancel">Cancel</button></li>
+               <li><button class="primary-button" type="submit" value="Sign In">Sign In</button><button class="primary-button cancel-btn" value="cancel">Cancel</button></li>
                </ul>
            </fieldset>
        </form>
@@ -67,9 +67,9 @@ function generateWelcomeHTML() {
    
    function generateIdeaBoardTitleHTML(){
      return `
-       <section class= "js-idea-board">
-           <div class= "idea-board-header">
-               <h1 class="idea-board-title">Idea Board</h1>
+       <section class="js-idea-board">
+           <div class="idea-board-header">
+               <h1 class="idea-board-title">My Idea Board</h1>
                <button class="js-show-new-idea-form-btn">Add New Idea</button>
            </div>
            <ul class="js-user-ideas">
@@ -80,22 +80,23 @@ function generateWelcomeHTML() {
    
    function generateIdeaSummaryHTML(idea) {
       return `
-      <li class = "idea-summary-box">
-       <ul class = "idea-summary">
-            <li class="idea-title">${idea.title}</li>
-            <li class="idea-status">Status: ${idea.status}</li>
-       </ul>
-       <button class="js-show-idea-details-btn" data-id="${idea.id}">View Details/Edit</button>
-       </li>
+      <ul class = "idea-summary-note">
+      <div class="idea-summary-note-header">
+        <li class="idea-title">${idea.title}</li>
+    </div>
+       <li class="idea-status">Status: ${idea.status}</li>
+       <li></li>
+       <li><button class="js-show-idea-details-btn edit-idea-note" data-id="${idea.id}">View Details/Edit</button></li>
+       <li class="create-date-summary">${idea.createDate}</li> 
+    </ul>
       `
    }
    
+
+
   function generateNav(state){
-    return `
-   <div class = "home-link">
-    <a href="index.html"><img src="" class="icon-img" alt="home-link"></a>
-    </div> 
-    ${state ? `<ul class="logged-in-nav-details">
+    return ` 
+    ${state ? `<ul class="site-nav-list">
     <li>Welcome: <span class="acount-name">${state}</span></li>
     <li><button class="js-log-out-btn" type="button">Log Out</button></li>
     </ul>`: ""}
@@ -106,10 +107,11 @@ function generateWelcomeHTML() {
        return `
        <div class = "idea-detailed-box">
         <ul class = "idea-detailed">
-             <li class="idea-title">${idea.title}</li>
-             <li class="idea-status">${idea.status}</li>
-             <li class="idea-likeability">${idea.likability}</li>
-             <li class="idea-description">${idea.description}</li>
+            <li class="create-date">${idea.createDate}</li>     
+            <li class="idea-title">${idea.title}</li>
+            <li class="idea-status">${idea.status}</li>
+            <li class="idea-likeability">${idea.likability}</li>
+            <li class="idea-description">${idea.description}</li>
         </ul>
         <button class="js-show-edit-idea-form-btn" data-id="${idea.id}">Edit</button>
         <button id="js-delete-idea-btn" data-id="${idea.id}">Delete</button>
@@ -124,6 +126,7 @@ function generateWelcomeHTML() {
            <fieldset>
                <legend>Update Idea Details</legend>
                <ul>   
+                <li class="create-date">${idea.createDate}</li>
               <li><label for="title-txt">
                    Title: <input id="title-txt" type="text" required value="${idea.title}"></label></li>
                <li><label for="description-txt">

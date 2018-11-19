@@ -3,18 +3,18 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const faker = require('faker');
 const jsonwebtoken = require('jsonwebtoken');
-const { JWT_SECRET, JWT_EXPIRY, TEST_DATABASE_URL } = require('../app/config');
-const { runServer, closeServer, app } = require('../app/server');
-const { User } = require('../app/user/model');
+const { JWT_SECRET, JWT_EXPIRY, DATABASE_URL } = require('../app/config');
+const { startServer, stopServer, app } = require('../app/server');
+const { User } = require('../app/user/user.model');
 const { Idea } = require('../app/idea/idea.model');
 const expect = chai.expect;
 chai.use(chaiHttp);
 
 describe('tests for api/owner', function() {
-  let testUser, jwtToken;
+  let testUser, jwToken;
 
   before(function() {
-    return runServer(TEST_DATABASE_URL);
+    return startServer(DATABASE_URL);
   });
 
   beforeEach(function() {
@@ -26,6 +26,7 @@ describe('tests for api/owner', function() {
           firstName: testUser.firstName,
           lastName: testUser.lastName,
           username: testUser.username,
+          email: testUser.email,
           password: hashedPassword
         })
         .catch(err => {
@@ -36,12 +37,13 @@ describe('tests for api/owner', function() {
       .then(createdUser => {
         testUser.id = createdUser.id;
 
-        jwtToken = jsonwebtoken.sign(
+        jwToken = jsonwebtoken.sign(
           {
             user: {
               id: testUser.id,
               firstName: testUser.firstName,
               lastName: testUser.lastName,
+              email: testUser.email,
               username: testUser.username
             }
           },
@@ -81,21 +83,21 @@ describe('tests for api/owner', function() {
   });
 
   after(function() {
-    return closeServer();
+    return stopServer();
   })
 
   describe('POST', function() {
     it('should create a idea', function() {
       let newIdea = generateIdeaData();
       return chai.request(app)
-        .post('/api/owner')
-        .set('Authorization', `Bearer ${jwtToken}`)
+        .post('/api/idea')
+        .set('Authorization', `Bearer ${jwToken}`)
         .send(newIdea)
         .then(res => {
           expect(res).to.have.status(201);
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');
-          expect(res.body).to.include.keys('user', 'title', 'description', 'status', 'likability', 'notes');
+          expect(res.body).to.include.keys('user', 'title', 'description', 'status', 'likability');
         })
     });
   });
@@ -103,15 +105,15 @@ describe('tests for api/owner', function() {
   describe('GET', function() {
     it('should return a users ideas', function() {
       return chai.request(app)
-        .get('/api/owner')
-        .set('Authorization', `Bearer ${jwtToken}`)
+        .get('/api/idea')
+        .set('Authorization', `Bearer ${jwToken}`)
         .then(res => {
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.be.a('array');
           expect(res.body).to.have.lengthOf.at.least(1);
           const idea = res.body[0];
-          expect(idea).to.include.keys('user', 'title', 'description', 'status', 'likeability', 'notes');
+          expect(idea).to.include.keys('user', 'title', 'description', 'status', 'likability');
           expect(idea.user).to.be.a('object');
           expect(idea.user).to.include.keys('firstName', 'lastName', 'username');
         })
@@ -126,14 +128,14 @@ describe('tests for api/owner', function() {
           searchIdeas = ideas[0];
 
           return chai.request(app)
-            .get(`/api/owner/${searchIdea.id}`)
-            .set('Authorization', `Bearer ${jwtToken}`);
+            .get(`/api/idea/${idea.id}`)
+            .set('Authorization', `Bearer ${jwToken}`);
         })
         .then(res => {
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');
-          expect(res.body).to.include.keys('user', 'title', 'description', 'status', 'likeability', 'notes');
+          expect(res.body).to.include.keys('user', 'title', 'description', 'status', 'likability');
         })
     });
   });
@@ -149,8 +151,8 @@ describe('tests for api/owner', function() {
           ideaToUpdate = ideas[0];
 
           return chai.request(app)
-            .put(`/api/owner/${ideaToUpdate.id}`)
-            .set('Authorization', `Bearer ${jwtToken}`)
+            .put(`/api/idea/${idea.id}`)
+            .set('Authorization', `Bearer ${jwToken}`)
             .send(newIdeaData)
         })
         .then(res => {
@@ -174,8 +176,8 @@ describe('tests for api/owner', function() {
           ideaToDelete = ideas[0];
 
           return chai.request(app)
-            .delete(`/api/owner/${ideaToDelete.id}`)
-            .set('Authorization', `Bearer ${jwtToken}`);
+            .delete(`/api/idea/${idea.id}`)
+            .set('Authorization', `Bearer ${jwToken}`);
         })
         .then(res => {
           expect(res).to.have.status(204);
@@ -194,6 +196,7 @@ describe('tests for api/owner', function() {
       firstName: `${faker.name.firstName()}`,
       lastName: `${faker.name.lastName()}`,
       username: `${faker.internet.userName()}`,
+      email: `${faker.internet.email()}`,
       password: `${faker.internet.password()}`
     };
   }
@@ -201,11 +204,11 @@ describe('tests for api/owner', function() {
   // Generates a idea object
   function generateIdeaData() {
     return {
-      title: `${faker.name.firstName()}`,
-      description: `${faker.name.lastName()}`,
-      status: `${faker.name.firstName()}`,
-      likeability: `${faker.address.streetAddress()}`,
-      notes: `${faker.lorem.paragraph()}`
+      title: `${faker.lorem.sentence()}`,
+      description: `${faker.lorem.sentence()}`,
+      status: 'Not-Started',
+      likeability: '2',
+
     };
   }
 });

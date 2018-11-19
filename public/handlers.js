@@ -155,22 +155,17 @@ function handleUpdateIdea (){
         const e = document.getElementById('status-selector');
         const statusVal = e.options[e.selectedIndex].value;
 
-        console.log(ideaID);
         const updatedIdea = {
-            //id: $(event.currentTarget).data('id'),
             title: $('#title-txt').val(),
             description: $('#description-txt').val(),
             status: statusVal,
             likability: $("input[name='likability-rating']:checked").val()
-    
         }
        
-        console.log(updatedIdea);
-
         updateIdea({
             jwToken: user, 
-            ideaID: ideaID,
-            updatedIdea: updatedIdea, 
+            ideaID,
+            updatedIdea,
             onSuccess: getAndDisplayIdeas, 
             onError: ""
         });

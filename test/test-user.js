@@ -2,9 +2,9 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const faker = require('faker');
 const mongoose = require('mongoose');
-const { app, runServer, closeServer } = require('../app/server');
-const { User } = require('../app/user/model');
-const { TEST_DATABASE_URL } = require('../app/config');
+const { app, startServer, stopServer } = require('../app/server');
+const { User } = require('../app/user/user.model');
+const { DATABASE_URL } = require('../app/config');
 const expect = chai.expect;
 chai.use(chaiHttp);
 
@@ -12,7 +12,7 @@ describe('tests for /api/user', function() {
   let testUser;
 
   before(function() {
-    return runServer(TEST_DATABASE_URL);
+    return startServer(DATABASE_URL);
   });
 
   // Create a test user before each test
@@ -40,7 +40,7 @@ describe('tests for /api/user', function() {
   });
 
   after(function() {
-    return closeServer();
+    return stopServer();
   });
 
   describe('GET', function() {
@@ -52,7 +52,7 @@ describe('tests for /api/user', function() {
           expect(res).to.be.json;
           expect(res.body).to.be.a('array');
           expect(res.body).to.have.lengthOf.at.least(1);
-          expect(res.body[0]).to.include.keys('id', 'firstName', 'lastName', 'username', )
+          expect(res.body[0]).to.include.keys('id', 'firstName', 'lastName', 'email', 'username', )
         });
     });
 
@@ -72,6 +72,7 @@ describe('tests for /api/user', function() {
           expect(searchUser.id).to.equal(user.id);
           expect(searchUser.firstName).to.equal(user.firstName);
           expect(searchUser.lastName).to.equal(user.lastName);
+          expect(searchUser.email).to.equal(user.email);
           expect(searchUser.username).to.equal(user.username);
         });
     });
@@ -87,9 +88,10 @@ describe('tests for /api/user', function() {
           expect(res).to.have.status(201);
           expect(res).to.be.json;
           expect(res.body).to.be.a('object')
-          expect(res.body).to.include.keys('id', 'username', 'firstName', 'lastName');
+          expect(res.body).to.include.keys('id', 'username', 'firstName', 'lastName', 'email');
           expect(res.body.firstName).to.equal(newUser.firstName);
           expect(res.body.lastName).to.equal(newUser.lastName);
+          expect(res.body.email).to.equal(newUser.email);
           expect(res.body.username).to.equal(newUser.username);
         });
     });
@@ -100,6 +102,7 @@ describe('tests for /api/user', function() {
     return {
       firstName: `${faker.name.firstName()}`,
       lastName: `${faker.name.lastName()}`,
+      email: `${faker.internet.email()}`,
       username: `${faker.internet.userName()}`,
       password: `${faker.internet.password()}`
     };

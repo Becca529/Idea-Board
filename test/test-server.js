@@ -1,17 +1,17 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const { app, runServer, closeServer } = require('../app/server');
-const{ TEST_DATABASE_URL } = require('../app/config');
+const { app, startServer, stopServer } = require('../app/server');
+const{ DATABASE_URL } = require('../app/config');
 const expect = chai.expect;
 chai.use(chaiHttp);
 
 describe('tests for /', function() {
   before(function() {
-    return runServer(TEST_DATABASE_URL);
+    return startServer(DATABASE_URL);
   });
 
   after(function() {
-    return closeServer();
+    return stopServer();
   });
 
   it('should run index.html', function() {
