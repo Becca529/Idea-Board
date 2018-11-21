@@ -4,7 +4,7 @@ function generateWelcomeHTML() {
     return `
        <div class= "js-welcome-content">
            <h1>Welcome to Idea Board</h1>
-           <h2>A place to create and store your creative juices for ideas and projects</h2>
+           <h2>A place to create and store your creative juices for ideas and projects.</h2>
            <button class="js-show-log-in-form-btn" type="button">Log In</button>
        </div>
        <p class="sign-up-text ">New user?<button id="js-show-sign-up-form-btn" type="button">Sign up</button></p>
@@ -23,19 +23,30 @@ function generateWelcomeHTML() {
    function generateLogInForm(){
        return `
        <form id="form-log-in">
-           <fieldset>
-               <legend>Please Sign In</legend>
-               <ul>
-               <li><label for="username-txt">
-                   Username: <input id="username-txt" type="text" required>
-               </label></li>
-               <li><label for="password-txt">
-                   Password: <input id="password-txt" type="password" required>
-               </label></li>
-               <li><button class="primary-button" type="submit" value="Sign In">Sign In</button><button class="primary-button cancel-btn" value="cancel">Cancel</button></li>
-               </ul>
-           </fieldset>
-       </form>
+       <fieldset>
+           <legend>Please Sign In</legend>
+           <div class="row">
+               <div class="col-25">
+                   <label for="username-txt">Username:</label>
+               </div>
+               <div class="col-75">
+                   <input id="username-txt" type="text" required>
+               </div>
+           </div>
+           <div class="row">
+               <div class="col-25">
+                   <label for="password-txt">Password:</label>
+               </div>
+               <div class="col-75">
+                   <input id="password-txt" type="password" required>
+               </div>
+           </div>
+           <div class="row">
+               <button class="primary-button" type="submit" value="Sign In">Sign In</button><button class="primary-button cancel-btn"
+                   value="cancel">Cancel</button>
+           </div>
+       </fieldset>
+   </form>
        `
    }
    
@@ -44,77 +55,109 @@ function generateWelcomeHTML() {
    <form id="form-sign-up" method="post">
        <fieldset>
            <legend>Create an Account</legend>
-           <ul>   
-          <li><label for="first-name-txt">
-               First Name: <input id="first-name-txt" type="text" required></label></li>
-           <li><label for="last-name-txt">
-               Last Name: <input id="last-name-txt" type="text" required></label></li>
-           <li><label for="email-txt">
-               Email: <input id="email-txt" type="email" required>
-           </label></li>
-           <li><label for="username-txt">
-               Username: <input id="username-txt" type="text" required>
-           </label></li>
-           <li><label for="password-txt">
-               Password: <input id="password-txt" type="password" required>
-           </label></li>
-           <li><button type="submit" class="primary-button form-sign-up-button" value="submit">Submit</button><button type="cancel" class="primary-button cancel-btn" value="cancel">Cancel</button></li>
-           </ul>
+           <div class="row">
+           <div class="col-25">
+               <label for="first-name-txt">First Name:<span class="required">*</span></label>
+           </div>
+           <div class="col-75">
+               <input id="first-name-txt" type="text" required>
+           </div>
+       </div>
+       <div class="row">
+           <div class="col-25">
+               <label for="last-name-txt">Last Name:<span class="required">*</span></label>
+           </div>
+           <div class="col-75">
+               <input id="last-name-txt" type="text" required>
+           </div>
+       </div>
+       <div class="row">
+           <div class="col-25">
+               <label for="email-txt">Email:<span class="required">*</span></label>
+           </div>
+           <div class="col-75">
+               <input id="email-txt" type="email" required>
+           </div>
+       </div>
+       <div class="row">
+           <div class="col-25">
+               <label for="username-txt">Username:<span class="required">*</span></label>
+           </div>
+           <div class="col-75">
+               <input id="username-txt" type="text" required>
+           </div>
+       </div>
+       <div class="row">
+           <div class="col-25">
+               <label for="password-txt">Password:<span class="required">*</span></label>
+           </div>
+           <div class="col-75">
+               <input id="password-txt" type="password" required>
+           </div>
+       </div>
+       <div class="row">
+           <button type="submit" class="primary-button form-sign-up-button" value="submit">Submit</button><button type="cancel"
+               class="primary-button cancel-btn" value="cancel">Cancel</button>
+       </div>
+       <div class="row">
+           <p class="form-messages">*Required Field</p>
+       </div>
        </fieldset>
    </form>
    `
    }
    
-   function generateIdeaBoardTitleHTML(){
+   function generateIdeaBoardTitle(){
      return `
-       <section class="js-idea-board">
-           <div class="idea-board-header">
-               <h1 class="idea-board-title">My Idea Board</h1>
-               <button class="js-show-new-idea-form-btn">Add New Idea</button>
-           </div>
-           <ul class="js-user-ideas">
-           </ul>
-     </section>
+       <div class="js-idea-board">
+            <div class="row">
+                <button class="js-show-new-idea-form-btn">Add New Idea</button>
+            </div>
+            <div class="row">
+                <h1 class="idea-board-title">My Idea Board</h1>
+            </div>
+            <ul class="js-user-ideas"></ul>
+        </div>
      `
    }
    
    function generateIdeaSummaryHTML(idea) {
       return `
-      <ul class = "idea-summary-note">
-      <div class="idea-summary-note-header">
-        <li class="idea-title">${idea.title}</li>
-    </div>
-       <li class="idea-status">Status: ${idea.status}</li>
-       <li></li>
-       <li><button class="js-show-idea-details-btn edit-idea-note" data-id="${idea.id}">View Details/Edit</button></li>
-       <li class="create-date-summary">${idea.createDate}</li> 
-    </ul>
+        <div class="col-25">
+            <ul class="idea-summary-note">
+                <li class="create-date-summary">${idea.createDate}</li>
+                <li class="summary-idea-title">${idea.title}</li>
+                <li class="summary-idea-status">Status: ${idea.status}</li>
+                <div class="summary-idea-footer">
+                    <li><button class="js-show-idea-details-btn edit-idea-note" data-id="${idea.id}">View Details/Edit</button></li>
+                </div>
+            </ul>
+        </div>
       `
    }
    
-
-
   function generateNav(state){
     return ` 
-    ${state ? `<ul class="site-nav-list">
-    <li>Welcome: <span class="acount-name">${state}</span></li>
-    <li><button class="js-log-out-btn" type="button">Log Out</button></li>
+    ${state ? `<ul class="logged-in-nav">
+    <li class="nav-account home-btn">Welcome: <span class="acount-name">${state}</span></li>
+    <li class="js-log-out-btn">Log Out</a></li>
     </ul>`: ""}
-   `
+    `
    } 
+
    
    function generateIdeaDetails(idea) {
        return `
        <div class = "idea-detailed-box">
         <ul class = "idea-detailed">
-            <li class="create-date">${idea.createDate}</li>     
-            <li class="idea-title">${idea.title}</li>
-            <li class="idea-status">${idea.status}</li>
-            <li class="idea-likeability">${idea.likability}</li>
-            <li class="idea-description">${idea.description}</li>
+            <li class="create-date">Create Date: ${idea.createDate}</li>     
+            <li class="idea-title">Title: ${idea.title}</li>
+            <li class="idea-status">Status: ${idea.status}</li>
+            <li class="idea-likeability">Likability: ${idea.likability}</li>
+            <li class="idea-description">Description: ${idea.description}</li>
         </ul>
         <button class="js-show-edit-idea-form-btn" data-id="${idea.id}">Edit</button>
-        <button id="js-delete-idea-btn" data-id="${idea.id}">Delete</button>
+        <button class="js-delete-idea-btn" data-id="${idea.id}">Delete</button>
         <button class="cancel-btn" value="cancel">Cancel</button>
         </div>
        `
@@ -123,38 +166,60 @@ function generateWelcomeHTML() {
     function generateEditableIdeaForm(idea){
        return `
        <form id="form-update-idea" method="put" data-id="${idea.id}">
-           <fieldset>
-               <legend>Update Idea Details</legend>
-               <ul>   
-                <li class="create-date">${idea.createDate}</li>
-              <li><label for="title-txt">
-                   Title: <input id="title-txt" type="text" required value="${idea.title}"></label></li>
-               <li><label for="description-txt">
-                   Description: <input id="description-txt" type="text" value="${idea.description}"></label></li>
-                   <li><label for="status-select">
-                   Status: <select name ="status-options" id="status-selector" class="form-field" required> 
-                   <option value="not-started">Not Started</option>
-                   <option value="planning">Planning</option>
-                   <option value="in-progress">In Progress</option>
-                   <option value="completed">Completed</option>
-                   <option value="on-hold">On Hold</option>
-                 </select> 
-               </label></li>
-               <li><label for="likability-radio">
-                   Likability:  <fieldset id="likability-radio">
-                   <input type="radio" id="star3" name="likability-rating" value="3" title="Love"> 
-                   <label for="star-3"></label>
-                   <input type="radio" id="star2" name="likability-rating" value="2" title="Like">
-                   <label for="star-2"></label>
-                   <input type="radio" id="star1" name="likability-rating" value="1" title="Eh">
-                   <label for="star-1"></label>
-                   </fieldset>
-               </label></li>
-                   <li><button type="submit" class="primary-button" value="submit">Update</button><button type="cancel" class="primary-button cancel-btn" value="cancel">Cancel</button></li>
-               </ul>
-           </fieldset>
-       </form>
-       `
+       <fieldset>
+        <legend>Update Idea Details</legend>
+            <div class="row">
+                <div class="create-date-summary">Created: ${idea.createDate}</div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="title-txt">Title: </label>
+                </div>
+                <div class="col-75">
+                    <input id="title-txt" type="text" required value="${idea.title}">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="description-txt">Description:</label>
+                </div>
+                <div class="col-75">
+                    <textarea id="description-txt" type="text" required>${idea.description}</textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="status-selector">Status:</label>
+                </div>
+                <div class="col-75">
+                    <select name="status-options" id="status-selector" class="form-field" required>
+                        <option value="Not-Started">Not Started</option>
+                        <option value="Planning">Planning</option>
+                        <option value="In-Progress">In Progress</option>
+                        <option value="Completed">Completed</option>
+                        <option value="On-Hold">On Hold</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="likability-selector">Likability: </label>
+                </div>
+                <div class="col-75">
+                    <select name="likability-options" id="likability-selector" class="form-field" required>
+                        <option value="Eh">Eh</option>
+                        <option value="Like It">Like It</option>
+                        <option value="Love It">Love It</option>
+                     </select>
+                </div>
+            </div>
+            <div class="row">
+                <button type="submit" class="primary-button" value="submit">Update</button>
+                <button type="cancel" class="primary-button cancel-btn" value="cancel">Cancel</button>
+            </div>
+    </fieldset>
+    </form>
+    `
     }
    
     function generateNewIdeaForm(){
@@ -162,32 +227,51 @@ function generateWelcomeHTML() {
        <form id="form-new-idea" method="post">
            <fieldset>
                <legend>Add New Idea</legend>
-               <ul>   
-              <li><label for="title-txt">
-                   Title: <input id="title-txt" type="text" required></label></li>
-               <li><label for="description-txt">
-                   Description: <input id="description-txt" type="text"></label></li>
-               <li><label for="status-select">
-                   Status: <select name ="status-options" id="status-selector" class="form-field" required> 
-                   <option value="not-started">Not Started</option>
-                   <option value="planning">Planning</option>
-                   <option value="in-progress">In Progress</option>
-                   <option value="completed">Completed</option>
-                   <option value="on-hold">On Hold</option>
-                 </select> 
-               </label></li>
-               <li><label for="likability-radio">
-                   Likability:  <fieldset id="likability-radio">
-                   <input type="radio" id="star3" name="likability-rating" value="3" title="Love"> 
-                   <label for="star-3"></label>
-                   <input type="radio" id="star2" name="likability-rating" value="2" title="Like">
-                   <label for="star-2"></label>
-                   <input type="radio" id="star1" name="likability-rating" value="1" title="Eh">
-                   <label for="star-1"></label>
-                   </fieldset>
-               </label></li>
-               <li><button type="submit" class="primary-button" value="submit">Submit</button><button type="cancel" class="primary-button cancel-btn" value="cancel">Cancel</button></li>
-               </ul>
+               <div class="row">
+               <div class="col-25">
+                   <label for="title-txt">Title: </label>
+               </div>
+               <div class="col-75">
+                   <input id="title-txt" type="text" required>
+               </div>
+           </div>
+           <div class="row">
+               <div class="col-25">
+                   <label for="description-txt">Description:</label>
+               </div>
+               <div class="col-75">
+                   <textarea id="description-txt" type="textarea" style="height:150px"></textarea>
+               </div>
+           </div>
+           <div class="row">
+               <div class="col-25">
+                   <label for="status-select">Status: </label>
+               </div>
+               <div class="col-75">
+                   <select name="status-options" id="status-selector" class="form-field" required>
+                       <option value="Not-Started">Not Started</option>
+                       <option value="Planning">Planning</option>
+                       <option value="In-Progress">In Progress</option>
+                       <option value="Completed">Completed</option>
+                       <option value="On-Hold">On Hold</option>
+                   </select>
+               </div>
+           </div>
+           <div class="row">
+               <div class="col-25">
+                   <label for="likability-radio">Likability: </label>
+               </div>
+               <div class="col-75">
+                   <select name="likability-options" id="likability-selector" class="form-field" required>
+                       <option value="Eh">Eh</option>
+                       <option value="Like It">Like It</option>
+                       <option value="Love It">Love It</option>
+                    </select>
+               </div>
+           </div>
+           <div class="row">
+            <button type="submit" class="primary-button" value="submit">Submit</button><button type="cancel" class="primary-button cancel-btn" value="cancel">Cancel</button>
+           </div>
            </fieldset>
        </form>
        `

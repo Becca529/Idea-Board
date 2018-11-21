@@ -1,7 +1,8 @@
 //ACTION FUNCTIONS
 //HTTP REQUESTS
 //creates new user through POST /api/user endpoint
-function doNewUserCreation (newUserData, onSuccess, onError) {
+function doNewUserCreation (options) {
+    const {newUserData, onSuccess, onError} = options
     const settings = { 
             type: 'POST',
             url: '/api/user',
@@ -20,7 +21,8 @@ function doNewUserCreation (newUserData, onSuccess, onError) {
     }
 
 //Sends user credentails through POST /api/auth/login endpoint
-function doUserLogIn(credentials, onSuccess, onError){
+function doUserLogIn (options){
+    const { credentials, onSuccess, onError} = options;
     const settings = { 
             type: 'POST',
             url: '/api/auth/login',
@@ -117,7 +119,7 @@ function updateIdea (options){
         },
         success: onSuccess,
         error: err => {
-            console.error(err);
+            //console.error(err);
             if (onError) {
                 onError();
             }
@@ -155,7 +157,7 @@ function getAndDisplayIdeas(){
     const options = {jwToken: user, onSuccess: success};
     getIdeas(options);
     displayIdeaBoardTitle(null, '.js-content');
-    displayNav(username, ('nav'));
+    displayNav(username, ('.top-nav'));
     
 }
 

@@ -23,14 +23,13 @@ userSchema.methods.serialize = function () {
     };
 };
 
-//Hash provided password
-userSchema.statics.hashPassword = function (password) {
-    return bcrypt.hash(password, 10);
-};
-
 //Password match check looking at stored password and entered password
 userSchema.methods.validatePassword = function (password) {
     return bcrypt.compare(password, this.password);
+};
+//Hash provided password
+userSchema.statics.hashPassword = function (password) {
+    return bcrypt.hash(password, 10);
 };
 
 //Validates new user data against joi schema

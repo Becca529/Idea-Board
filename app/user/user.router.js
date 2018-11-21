@@ -1,5 +1,9 @@
 const express = require('express');
 const Joi = require('joi');
+const bodyParser = require('body-parser');
+
+
+const jsonParser = bodyParser.json();
 
 const { User, UserJoiSchema } = require('./user.model.js');
 
@@ -8,18 +12,20 @@ const userRouter = express.Router();
 //Creates new user
 userRouter.post('/', (req, res) => {
     const newUser = {
-        firstname: req.body.newUserData.firstName,
-        lastname: req.body.newUserData.lastName,
-        email: req.body.newUserData.email,
-        username: req.body.newUserData.username,
-        password: req.body.newUserData.password
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        email: req.body.email,
+        username: req.body.username,
+        password: req.body.password
     };
 
     //Validate new user information against joi schema
     const validation = Joi.validate(newUser, UserJoiSchema);
     if (validation.error) {
-        return res.status(400).json({ error: validation.error });
+        console.log("validation errors");
+        return response.status(400).json({ error: validation.error });
     }
+
     //Validate that there is not an existing account with either the provided email or username in MongoDB Step 
     User.findOne({
         $or: [
@@ -28,11 +34,14 @@ userRouter.post('/', (req, res) => {
         ]
     }).then(user => {
         if (user) {
+            console.log("validation error- username/email")
             //if existing email or username found - return status code and error message
             return res.status(400).json({ error: 'Database Error: A user with that username and/or email already exists.' });
-        }
-    //If no username/email conflict - hash entered password
+           //fix - throw error here  instead of return
+        } 
+        //If no username/email conflict - hash entered password
         return User.hashPassword(newUser.password);
+
     }).then(passwordHash => {
         newUser.password = passwordHash;
         //create new user in mongodb
@@ -43,11 +52,12 @@ userRouter.post('/', (req, res) => {
             })
             .catch(err => {
                 //if error with creating new user - return HTTP status code and error
-                console.error(err);
+                console.error(err.message);
                 return res.status(500).json({error: err.message});
             });
-    });
+    })
 });
+
 
 //Get all users
 userRouter.get('/', (req, res) => {

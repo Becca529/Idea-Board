@@ -4,6 +4,7 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const passport = require('passport');
+mongoose.Promise = global.Promise;
 
 const {DATABASE_URL, PORT} = require('./config');
 const { userRouter } = require('./user/user.router');
@@ -13,17 +14,6 @@ const { localStrategy, jwtStrategy } = require('./auth/auth.strategy');
 
 const app = express();
 let server;
-
-// CORS
-/* app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
-    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE');
-    if (req.method === 'OPTIONS') {
-      return res.send(204);
-    }
-    next();
-  }); */
 
 //Configure passport to use local/jsonweb token strategies for authetentation 
 passport.use(localStrategy);
@@ -40,12 +30,10 @@ app.use('/api/idea', ideaRouter); // Redirects all calls to /idea to ideaRouter.
 app.use('/api/auth', authRouter); // Redirects all calls to /user to userRouter.
 
 
-
 //For unhandled HTTP requests - return 404 not found error
 app.use('*', function (req, res) {
   res.status(404).json({ error: 'Not Found.' });
 });
-
 
 
 //Connect to MongoDB database and start expressJS server

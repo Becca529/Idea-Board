@@ -54,7 +54,6 @@ function handleShowEditableIdeaForm(){
         const ideaID = $(event.currentTarget).data('id');
         console.log(ideaID);
         const success = response => {
-            console.log("success");
             displayEditableIdeaForm(response, ('.js-content'), false);
         }
         getIdeaDetails({
@@ -67,8 +66,8 @@ function handleShowEditableIdeaForm(){
 
 //handles deleting an idea after clicking on delete button
 function handleDeleteIdea(){
-    $('body').on("click", "#js-delete-idea-btn", (event) => {
-        const ideaID = $(event.currentTarget).data("id");
+    $('body').on("click", ".js-delete-idea-btn", (event) => {
+        const ideaID = $(event.currentTarget).data('id');
         console.log(ideaID);
         deleteIdea({jwToken: user, ideaID, onSuccess: getAndDisplayIdeas, onError: ""});
     });
@@ -92,11 +91,10 @@ function handleSignUpSubmit (){
         const newUserData = {
             username: $('#username-txt').val(),
             password: $('#password-txt').val(),
-            firstName: $('#first-name-txt').val(),
-            lastName: $('#last-name-txt').val(),
+            firstname: $('#first-name-txt').val(),
+            lastname: $('#last-name-txt').val(),
             email: $('#email-txt').val()
         }
-        console.log(JSON.parse(JSON.stringify(newUserData)));
 
         doNewUserCreation({
             newUserData, 
@@ -117,7 +115,13 @@ function handleLogInSubmit (){
             username: $('#username-txt').val(),
             password: $('#password-txt').val()
         }
-        doUserLogIn(credentials, getAndDisplayIdeas);
+        doUserLogIn({
+            credentials, 
+            onSuccess: getAndDisplayIdeas, 
+            onError: err => {
+                alert('Incorrect username or password. Please try again.');
+            }
+        });
     });
 }
 
@@ -127,15 +131,17 @@ function handleLogInSubmit (){
 function handleCreateNewIdea (){
     $('body').on("submit", "#form-new-idea", (event) => {
         event.preventDefault();
-        const e = document.getElementById('status-selector');
-        const statusVal = e.options[e.selectedIndex].value;
+        const statusElement= document.getElementById('status-selector');
+        const statusVal = statusElement.options[statusElement.selectedIndex].value;
+        const likabilityElement = document.getElementById('likability-selector');
+        const likabilityVal = likabilityElement.options[likabilityElement.selectedIndex].value;
         
         
         const newIdea = {
             title: $('#title-txt').val(),
-            description: $('#description-txt').val(),
+            description: document.getElementById("description-txt").value,
             status: statusVal,
-            likability: $("input[name='likability-rating']:checked").val()
+            likability: likabilityVal
         }
 
         createNewIdea({
@@ -152,15 +158,19 @@ function handleUpdateIdea (){
     $('body').on("submit", "#form-update-idea", (event) => {
         event.preventDefault();
         const ideaID = $(event.currentTarget).data('id');
-        const e = document.getElementById('status-selector');
-        const statusVal = e.options[e.selectedIndex].value;
+        const statusElement= document.getElementById('status-selector');
+        const statusVal = statusElement.options[statusElement.selectedIndex].value;
+        const likabilityElement = document.getElementById('likability-selector');
+        const likabilityVal = likabilityElement.options[likabilityElement.selectedIndex].value;
 
         const updatedIdea = {
             title: $('#title-txt').val(),
-            description: $('#description-txt').val(),
+            description: document.getElementById("description-txt").value,
             status: statusVal,
-            likability: $("input[name='likability-rating']:checked").val()
+            likability: likabilityVal
         }
+        console.log(updatedIdea);
+        console.log(ideaID, "nothing");
        
         updateIdea({
             jwToken: user, 

@@ -1,4 +1,3 @@
-'use strict'
 
 const express = require("express");
 const Joi = require('joi');
@@ -8,7 +7,9 @@ const bodyParser = require('body-parser');
 
 const jsonParser = bodyParser.json();
 const passport = require('passport');
-
+const mongoose = require('mongoose');
+const ObjectId = require('mongodb').ObjectId;
+mongoose.Promise = global.Promise;
 const { Idea , ideaJoiSchema } = require('./idea.model.js');
 const { jwtStrategy } = require('../auth/auth.strategy');
 
@@ -60,7 +61,7 @@ ideaRouter.post('/', jsonParser, jwtAuth, (req, res) => {
 });
     
 // Update idea by id
-ideaRouter.put('/:ideaid', jsonParser, jwtAuth, (req, res) => {
+ideaRouter.put('/:ideaid', jwtAuth, (req, res) => {
   const updatedIdea = {
     title: req.body.title,
     description: req.body.description,
@@ -69,21 +70,43 @@ ideaRouter.put('/:ideaid', jsonParser, jwtAuth, (req, res) => {
     //notes: req.body.notes
   };
 console.log(updatedIdea);
+console.log(req.params.ideaid);
   // Checks that all provided data passes all schema requirements
   const validation = Joi.validate(updatedIdea, ideaJoiSchema);
   if (validation.error) {
+    console.log("validation");
     return res.status(400).json({ error: validation.error });
   }
-
+  console.log("no validation issue");
   // Looks for idea by id, if found, updates info
   Idea.findByIdAndUpdate(req.params.ideaid, updatedIdea)
     .then(() => {
+      console.log("update");
       return res.status(204).end();
     })
     .catch(err => {
+      console.log("here");
       return res.status(500).json(err)
     });
 });
+
+
+// ideaRouter.put('/:ideaid', jsonParser, jwtAuth, (req,res) => {
+// console.log(req.params.ideaid, req.body._id );
+
+// const toUpdate = {
+//       title: req.body.title,
+//       description: req.body.description,
+//       status: req.body.status,
+//       likability: req.body.likability,
+//     };
+// console.log(toUpdate);
+//   Idea
+//     .findByIdAndUpdate(req.params.id, {$set: toUpdate})
+//     .then(idea => res.status(204).end())
+//     .catch(err => res.status(500).json({message: 'Internal server error'}));
+//   });
+
 
 // Retrieve user ideas
 ideaRouter.get('/', jsonParser, (req, res) => {

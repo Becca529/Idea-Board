@@ -8,7 +8,7 @@ function displayNav(state, container, append = false) {
 }
 
 function displayIdeaBoardTitle(state, container, append = false) {
-    appendOrReplace(state, container, generateIdeaBoardTitleHTML, append);
+    appendOrReplace(state, container, generateIdeaBoardTitle, append);
  }
 
  function displayWelcomeHTML(container, append = false) {
