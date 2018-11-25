@@ -37,9 +37,25 @@ function displayIdeaDetails (idea, container, append = false){
 
 function displayEditableIdeaForm (idea, container, append = false){
     appendOrReplace(idea, container, generateEditableIdeaForm, append);
+    setSelectedIndex(document.getElementById("status-selector"),idea.status);
+    setSelectedIndex(document.getElementById("likability-selector"),idea.likability);
+    console.log(idea.status, idea.likability);
+
 
 };
 
 function displayNewIdeaForm (container, append = false){
     appendOrReplace(null, container, generateNewIdeaForm, append);
 };
+
+function setSelectedIndex(s, valsearch) {
+    for (i = 0; i < s.options.length; i++) {
+        if (s.options[i].value == valsearch) {
+            // Item is found. Set its property and exit
+            s.options[i].selected = true;
+            break;
+        }
+
+    }
+    return;
+}

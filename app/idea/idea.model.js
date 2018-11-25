@@ -9,16 +9,13 @@ const noteScehma = mongoose.Schema ({
 const ideaSchema = mongoose.Schema ({
     user: {type: mongoose.Schema.Types.ObjectId, ref: 'user'},
     title: { type: String, required: true },
-    description: { type: String},
+    description: { type: String },
     status: {type: String, required: true },
-    likability: {type: Number} ,
+    likability: {type: String, required: true } ,
     createDate: { type: Date, default: Date.now },
     //notes: [noteScehma]
 });
 
-
-// Defined an instance of a dog owner and check if user is populated
-// to prevent sensitive info from being displayed
 
 ideaSchema.methods.serialize = function() {
     let user;

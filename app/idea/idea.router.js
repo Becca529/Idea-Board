@@ -41,7 +41,7 @@ ideaRouter.post('/', jsonParser, jwtAuth, (req, res) => {
     title: req.body.title,
     description: req.body.description,
     status: req.body.status,
-    likability: req.body.likeability,
+    likability: req.body.likability,
   };
   
    // Checks that all provided data passes all schema requirements

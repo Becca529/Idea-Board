@@ -259,7 +259,7 @@ function generateWelcomeHTML() {
            </div>
            <div class="row">
                <div class="col-25">
-                   <label for="likability-radio">Likability: </label>
+                   <label for="likability-selector">Likability: </label>
                </div>
                <div class="col-75">
                    <select name="likability-options" id="likability-selector" class="form-field" required>

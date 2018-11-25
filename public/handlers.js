@@ -61,8 +61,10 @@ function handleShowEditableIdeaForm(){
             ideaID,
             onSuccess: success
         });
+
     });
 }
+
 
 //handles deleting an idea after clicking on delete button
 function handleDeleteIdea(){
@@ -169,8 +171,6 @@ function handleUpdateIdea (){
             status: statusVal,
             likability: likabilityVal
         }
-        console.log(updatedIdea);
-        console.log(ideaID, "nothing");
        
         updateIdea({
             jwToken: user, 
