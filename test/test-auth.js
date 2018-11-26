@@ -5,7 +5,7 @@ const jsonwebtoken = require("jsonwebtoken");
 const faker = require("faker");
 const { app, startServer, stopServer } = require("../app/server");
 const { User } = require("../app/user/user.model");
-const { DATABASE_URL, JWT_SECRET, JWT_EXPIRY } = require("../app/config");
+const { TEST_DATABASE_URL , JWT_SECRET, JWT_EXPIRY } = require("../app/config");
 const expect = chai.expect;
 chai.use(chaiHttp);
 
@@ -13,7 +13,7 @@ describe("tests for /api/auth", function() {
   let testUser, jwToken;
 
   before(function () {
-    return startServer(true);
+    return startServer(TEST_DATABASE_URL);
   });
 
   beforeEach(function() {

@@ -3,7 +3,7 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const faker = require('faker');
 const jsonwebtoken = require('jsonwebtoken');
-const { JWT_SECRET, JWT_EXPIRY, DATABASE_URL } = require('../app/config');
+const { JWT_SECRET, JWT_EXPIRY, TEST_DATABASE_URL } = require('../app/config');
 const { startServer, stopServer, app } = require('../app/server');
 const { User } = require('../app/user/user.model');
 const { Idea } = require('../app/idea/idea.model');
@@ -15,7 +15,7 @@ describe('tests for api/idea', function () {
   let testUser, jwToken;
 
   before(function () {
-    return startServer(true);
+    return startServer(TEST_DATABASE_URL);
   });
 
   beforeEach(function () {

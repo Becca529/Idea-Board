@@ -35,7 +35,7 @@ app.use('*', function (req, res) {
 });
 
 //Connect to MongoDB database and start expressJS server
-function startServer(dataBaseUrl = DATABASE_URL, port = PORT) {
+function startServer(dataBaseUrl, port = PORT) {
     return new Promise((resolve, reject) => {
         //Connect to database
         mongoose.connect(dataBaseUrl, { useNewUrlParser: true }, err => {
@@ -83,7 +83,7 @@ function stopServer() {
 }
 
 if (require.main === module) {
-    startServer().catch(err => {
+    startServer(DATABASE_URL).catch(err => {
         console.error(err);
     });
 }

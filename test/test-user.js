@@ -4,7 +4,7 @@ const faker = require('faker');
 const mongoose = require('mongoose');
 const { app, startServer, stopServer } = require('../app/server');
 const { User } = require('../app/user/user.model');
-const { DATABASE_URL } = require('../app/config');
+const { TEST_DATABASE_URL } = require('../app/config');
 const expect = chai.expect;
 chai.use(chaiHttp);
 
@@ -12,7 +12,7 @@ describe('tests for /api/user', function () {
   let testUser;
 
   before(function () {
-    return startServer(true);
+    return startServer(TEST_DATABASE_URL);
   });
 
   // Create a test user before each test

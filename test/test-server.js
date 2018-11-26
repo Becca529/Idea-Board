@@ -1,13 +1,13 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const { app, startServer, stopServer } = require('../app/server');
-const { DATABASE_URL } = require('../app/config');
+const { TEST_DATABASE_URL } = require('../app/config');
 const expect = chai.expect;
 chai.use(chaiHttp);
 
 describe('tests for /', function () {
   before(function () {
-    return startServer(true);
+    return startServer(TEST_DATABASE_URL);
   });
 
   after(function () {
