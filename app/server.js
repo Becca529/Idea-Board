@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 mongoose.Promise = global.Promise;
 
-const { DATABASE_URL, PORT } = require('./config');
+const { DATABASE_URL, TEST_DATABASE_URL, PORT } = require('./config');
 const { userRouter } = require('./user/user.router');
 const { ideaRouter } = require('./idea/idea.router');
 const { authRouter } = require('./auth/auth.router');
