@@ -199,7 +199,7 @@ describe('tests for api/idea', function () {
     return {
       title: faker.lorem.word(),
       description: faker.lorem.sentence(),
-      status: 'Not-Started',
+      status: 'Not Started',
       likeability: 'Love It',
     };
   }

@@ -195,11 +195,11 @@ function generateEditableIdeaForm(idea) {
                 </div>
                 <div class="col-75">
                     <select name="status-options" id="status-selector" class="form-field" required>
-                        <option value="Not-Started">Not Started</option>
+                        <option value="Not Started">Not Started</option>
                         <option value="Planning">Planning</option>
-                        <option value="In-Progress">In Progress</option>
+                        <option value="In Progress">In Progress</option>
                         <option value="Completed">Completed</option>
-                        <option value="On-Hold">On Hold</option>
+                        <option value="On Hold">On Hold</option>
                     </select>
                 </div>
             </div>
