@@ -34,7 +34,7 @@ In order to strengthen my core full-stack development capabilities I focused on 
 
 ### Idea Board Home
 
-![Idea-Board](screenshots/idea-board2.png "Idea Board")
+![Idea-Board](screenshots/idea-board.png "Idea Board")
 
 ### View Idea Details/Update
 
@@ -42,7 +42,7 @@ In order to strengthen my core full-stack development capabilities I focused on 
 
 ### Create New Idea
 
-![Create-New-Idea](screenshots/new-idea.png "Create New Idea")
+![Create-New-Idea](screenshots/newidea.png "Create New Idea")
 
 ## Technologies used
 
