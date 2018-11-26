@@ -37,8 +37,8 @@ userRouter.post('/', (req, res) => {
             console.log("validation error- username/email")
             //if existing email or username found - return status code and error message
             return res.status(400).json({ error: 'Database Error: A user with that username and/or email already exists.' });
-           //fix - throw error here  instead of return
-        } 
+            //fix - throw error here  instead of return
+        }
         //If no username/email conflict - hash entered password
         return User.hashPassword(newUser.password);
 
@@ -53,7 +53,7 @@ userRouter.post('/', (req, res) => {
             .catch(err => {
                 //if error with creating new user - return HTTP status code and error
                 console.error(err.message);
-                return res.status(500).json({error: err.message});
+                return res.status(500).json({ error: err.message });
             });
     })
 });

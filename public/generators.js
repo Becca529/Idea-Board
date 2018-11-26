@@ -3,25 +3,27 @@
 function generateWelcomeHTML() {
     return `
        <div class= "js-welcome-content">
-           <h1>Welcome to Idea Board</h1>
-           <h2>A place to create and store your creative juices for ideas and projects.</h2>
-           <button class="js-show-log-in-form-btn" type="button">Log In</button>
+       <img class="icon" src="./imgs/lightbulb.png" alt="light-bulb">
+            <h1>Welcome to Idea Board</h1>
+            <h2>A place to create and store your creative juices for ideas and projects.</h2>
+            <button class="js-show-log-in-form-btn" type="button">Log In</button>
        </div>
-       <p class="sign-up-text ">New user?<button id="js-show-sign-up-form-btn" type="button">Sign up</button></p>
+       <p class="sign-up-text">New user?<button id="js-show-sign-up-form-btn" type="button">Sign up</button></p>
        `
-   }
-   
-   function generateSignUpSuccessHTML() {
-       return `
+}
+
+function generateSignUpSuccessHTML() {
+    return `
        <div class= "js-account-created">
-           <h1>Your account has been created successfully!</h1>
+       <img class="icon" src="./imgs/check.png" alt="success-check-box">    
+       <h1>Your account has been created successfully!</h1>
            <button class="js-show-log-in-form-btn" type="button">Log In</button>
        </div>
        `
-   }
-   
-   function generateLogInForm(){
-       return `
+}
+
+function generateLogInForm() {
+    return `
        <form id="form-log-in">
        <fieldset>
            <legend>Please Sign In</legend>
@@ -48,10 +50,10 @@ function generateWelcomeHTML() {
        </fieldset>
    </form>
        `
-   }
-   
-   function generateSignUpForm(){
-   return `
+}
+
+function generateSignUpForm() {
+    return `
    <form id="form-sign-up" method="post">
        <fieldset>
            <legend>Create an Account</legend>
@@ -81,7 +83,7 @@ function generateWelcomeHTML() {
        </div>
        <div class="row">
            <div class="col-25">
-               <label for="username-txt">Username:<span class="required">*</span></label>
+               <label for="username-txt" maxlength="30">Username:<span class="required">*</span></label>
            </div>
            <div class="col-75">
                <input id="username-txt" type="text" required>
@@ -89,10 +91,10 @@ function generateWelcomeHTML() {
        </div>
        <div class="row">
            <div class="col-25">
-               <label for="password-txt">Password:<span class="required">*</span></label>
+               <label for="password-txt" maxlength="30">Password:<span class="required">*</span></label>
            </div>
            <div class="col-75">
-               <input id="password-txt" type="password" required>
+               <input id="password-txt" type="password" required placeholder="Min 6 characters">
            </div>
        </div>
        <div class="row">
@@ -105,10 +107,10 @@ function generateWelcomeHTML() {
        </fieldset>
    </form>
    `
-   }
-   
-   function generateIdeaBoardTitle(){
-     return `
+}
+
+function generateIdeaBoardTitle() {
+    return `
        <div class="js-idea-board">
             <div class="row">
                 <button class="js-show-new-idea-form-btn">Add New Idea</button>
@@ -119,35 +121,35 @@ function generateWelcomeHTML() {
             <ul class="js-user-ideas"></ul>
         </div>
      `
-   }
-   
-   function generateIdeaSummaryHTML(idea) {
-      return `
+}
+
+function generateIdeaSummaryHTML(idea) {
+    return `
         <div class="col-25">
             <ul class="idea-summary-note">
                 <li class="create-date-summary">${idea.createDate}</li>
                 <li class="summary-idea-title">${idea.title}</li>
                 <li class="summary-idea-status">Status: ${idea.status}</li>
                 <div class="summary-idea-footer">
-                    <li><button class="js-show-idea-details-btn edit-idea-note" data-id="${idea.id}">View Details/Edit</button></li>
+                    <li><button class="js-show-edit-idea-form-btn edit-idea-note" data-id="${idea.id}">View Details/Edit</button></li>
                 </div>
             </ul>
         </div>
       `
-   }
-   
-  function generateNav(state){
+}
+
+function generateNav(state) {
     return ` 
     ${state ? `<ul class="logged-in-nav">
-    <li class="nav-account home-btn">Welcome: <span class="acount-name">${state}</span></li>
-    <li class="js-log-out-btn">Log Out</a></li>
+    <li class="js-home-btn"><img class="js-home-icon"src="./imgs/home-btn-lightbulb.png" alt="home-btn"></li>
+    <li class="nav-account">Welcome: <span class="acount-name">${state}</span></li>
+    <li class="js-log-out-btn">Log Out</li>
     </ul>`: ""}
     `
-   } 
+}
 
-   
-   function generateIdeaDetails(idea) {
-       return `
+function generateIdeaDetails(idea) {
+    return `
        <div class = "idea-detailed-box">
         <ul class = "idea-detailed">
             <li class="create-date">Create Date: ${idea.createDate}</li>     
@@ -161,13 +163,13 @@ function generateWelcomeHTML() {
         <button class="cancel-btn" value="cancel">Cancel</button>
         </div>
        `
-    }
-   //review how to review and display data in different type of inputs ie status button radio button, text (placeholder or value or selected)
-    function generateEditableIdeaForm(idea){
-       return `
+}
+
+function generateEditableIdeaForm(idea) {
+    return `
        <form id="form-update-idea" method="put" data-id="${idea.id}">
        <fieldset>
-        <legend>Update Idea Details</legend>
+        <legend>Idea Details</legend>
             <div class="row">
                 <div class="create-date-summary">Created: ${idea.createDate}</div>
             </div>
@@ -176,7 +178,7 @@ function generateWelcomeHTML() {
                     <label for="title-txt">Title: </label>
                 </div>
                 <div class="col-75">
-                    <input id="title-txt" type="text" required value="${idea.title}">
+                    <input id="title-txt" type="text" maxlength="45" required value="${idea.title}">
                 </div>
             </div>
             <div class="row">
@@ -184,7 +186,7 @@ function generateWelcomeHTML() {
                     <label for="description-txt">Description:</label>
                 </div>
                 <div class="col-75">
-                    <textarea id="description-txt" type="text" required>${idea.description}</textarea>
+                    <textarea id="description-txt" type="text" maxlength="100">${idea.description}</textarea>
                 </div>
             </div>
             <div class="row">
@@ -215,15 +217,16 @@ function generateWelcomeHTML() {
             </div>
             <div class="row">
                 <button type="submit" class="primary-button" value="submit">Update</button>
+                <button class="js-delete-idea-btn" data-id="${idea.id}">Delete</button>
                 <button type="cancel" class="primary-button cancel-btn" value="cancel">Cancel</button>
             </div>
     </fieldset>
     </form>
     `
-    }
-   
-    function generateNewIdeaForm(){
-       return `
+}
+
+function generateNewIdeaForm() {
+    return `
        <form id="form-new-idea" method="post">
            <fieldset>
                <legend>Add New Idea</legend>
@@ -232,7 +235,7 @@ function generateWelcomeHTML() {
                    <label for="title-txt">Title: </label>
                </div>
                <div class="col-75">
-                   <input id="title-txt" type="text" required>
+                   <input id="title-txt" maxlength="45" type="text" required>
                </div>
            </div>
            <div class="row">
@@ -240,7 +243,7 @@ function generateWelcomeHTML() {
                    <label for="description-txt">Description:</label>
                </div>
                <div class="col-75">
-                   <textarea id="description-txt" type="textarea" style="height:150px"></textarea>
+                   <textarea id="description-txt" type="textarea" maxlength="100" style="height:150px"></textarea>
                </div>
            </div>
            <div class="row">
@@ -275,11 +278,10 @@ function generateWelcomeHTML() {
            </fieldset>
        </form>
        `
-    }
-   
+}
 
-   function generateLoggedInContent(contentData){   
-       return contentData.map((idea) => generateIdeaSummaryHTML(idea));
-   }
-   
-   
+//generates logged in content - which displays the user ideas
+function generateLoggedInContent(contentData) {
+    return contentData.map((idea) => generateIdeaSummaryHTML(idea));
+}
+
