@@ -1,5 +1,5 @@
 //GENERATOR FUNCTIONS-------------------------------------
-
+//Generates initial html when page loads
 function generateWelcomeHTML() {
     return `
        <div class= "js-welcome-content">
@@ -11,7 +11,7 @@ function generateWelcomeHTML() {
        <p class="sign-up-text">New user?<button id="js-show-sign-up-form-btn" type="button">Sign up</button></p>
        `
 }
-
+//Generates success message after user sign up
 function generateSignUpSuccessHTML() {
     return `
        <div class= "js-account-created">
@@ -21,7 +21,7 @@ function generateSignUpSuccessHTML() {
        </div>
        `
 }
-
+//Generates log in form
 function generateLogInForm() {
     return `
        <form id="form-log-in">
@@ -51,7 +51,7 @@ function generateLogInForm() {
    </form>
        `
 }
-
+//Generates sign up form
 function generateSignUpForm() {
     return `
    <form id="form-sign-up" method="post">
@@ -108,7 +108,7 @@ function generateSignUpForm() {
    </form>
    `
 }
-
+//Generates idea board header after log in
 function generateIdeaBoardTitle() {
     return `
        <div class="js-idea-board">
@@ -122,7 +122,7 @@ function generateIdeaBoardTitle() {
         </div>
      `
 }
-
+//Generates idea summary note for idea board
 function generateIdeaSummaryHTML(idea) {
     return `
         <div class="col-25">
@@ -137,7 +137,7 @@ function generateIdeaSummaryHTML(idea) {
         </div>
       `
 }
-
+//Generates navigation
 function generateNav(state) {
     return ` 
     ${state ? `<ul class="logged-in-nav">
@@ -147,7 +147,7 @@ function generateNav(state) {
     </ul>`: ""}
     `
 }
-
+//Generates idea detail list
 function generateIdeaDetails(idea) {
     return `
        <div class = "idea-detailed-box">
@@ -164,7 +164,7 @@ function generateIdeaDetails(idea) {
         </div>
        `
 }
-
+//Generates idea form and populates values for updates
 function generateEditableIdeaForm(idea) {
     return `
        <form id="form-update-idea" method="put" data-id="${idea.id}">
@@ -186,7 +186,7 @@ function generateEditableIdeaForm(idea) {
                     <label for="description-txt">Description:</label>
                 </div>
                 <div class="col-75">
-                    <textarea id="description-txt" type="text" maxlength="100">${idea.description}</textarea>
+                    <textarea id="description-txt" type="text" maxlength="500">${idea.description}</textarea>
                 </div>
             </div>
             <div class="row">
@@ -224,7 +224,7 @@ function generateEditableIdeaForm(idea) {
     </form>
     `
 }
-
+//Generates new idea form
 function generateNewIdeaForm() {
     return `
        <form id="form-new-idea" method="post">
@@ -243,7 +243,7 @@ function generateNewIdeaForm() {
                    <label for="description-txt">Description:</label>
                </div>
                <div class="col-75">
-                   <textarea id="description-txt" type="textarea" maxlength="100" style="height:150px"></textarea>
+                   <textarea id="description-txt" type="textarea" maxlength="500" style="height:150px"></textarea>
                </div>
            </div>
            <div class="row">

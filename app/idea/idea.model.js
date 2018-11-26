@@ -34,7 +34,7 @@ ideaSchema.methods.serialize = function () {
 const ideaJoiSchema = Joi.object().keys({
   user: Joi.string().optional(),
   title: Joi.string().min(1).trim().required(),
-  description: Joi.string().min(1).max(100).trim().allow(''),
+  description: Joi.string().min(1).max(500).trim().allow(''),
   status: Joi.string().min(1).trim().required(),
   likability: Joi.string().trim(),
   createDate: Joi.date().optional()
