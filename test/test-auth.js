@@ -9,8 +9,8 @@ const { TEST_DATABASE_URL , JWT_SECRET, JWT_EXPIRY } = require("../app/config");
 const expect = chai.expect;
 chai.use(chaiHttp);
 
-describe("tests for /api/auth", function() {
-  let testUser, jwToken;
+describe('tests for /api/auth', function() {
+  let testUser, authToken;
 
   before(function () {
     return startServer(TEST_DATABASE_URL);
@@ -30,9 +30,10 @@ describe("tests for /api/auth", function() {
         .then(createdUser => {
           testUser.id = createdUser.id;
 
-          jwToken = jsonwebtoken.sign(
+          authToken = jsonwebtoken.sign( 
             {
-              user: {
+              user: 
+              {
                 id: testUser.id,
                 firstname: testUser.firstname,
                 lastname: testUser.lastname,
@@ -40,13 +41,11 @@ describe("tests for /api/auth", function() {
                 username: testUser.username
               }
             },
-            JWT_SECRET,
-            {
+            JWT_SECRET, {
               algorithm: "HS256",
               expiresIn: JWT_EXPIRY,
               subject: testUser.username
-            }
-          );
+            });
         })
         .catch(err => {
           console.error(err);
@@ -71,7 +70,6 @@ describe("tests for /api/auth", function() {
     return stopServer();
   });
 
-
   it('Should login correctly and return a valid JSON Web Token', function () {
     return chai.request(app)
         .post('/api/auth/login')
@@ -80,12 +78,12 @@ describe("tests for /api/auth", function() {
             password: testUser.password
         })
         .then(res => {
-            expect(res).to.have.status(HTTP_STATUS_CODES.OK);
+            expect(res).to.have.status(200);
             expect(res).to.be.json;
             expect(res.body).to.be.a('object');
-            expect(res.body).to.include.keys('jwToken');
+            expect(res.body).to.include.keys('authToken');
 
-            const jwtPayload = jsonwebtoken.verify(res.body.jwToken, JWT_SECRET, {
+            const jwtPayload = jsonwebtoken.verify(res.body.authToken, JWT_SECRET, {
                 algorithm: ['HS256']
             });
             expect(jwtPayload.user).to.be.a('object');
@@ -98,27 +96,25 @@ describe("tests for /api/auth", function() {
         });
 });
 
-  it("should return a valid auth token with a newer expiry date", function () {
-    const firstJwtPayload = jsonwebtoken.verify(jwToken, JWT_SECRET, {
-      algorithm: ["HS256"]
+  it('should return a valid auth token with a newer expiry date', function () {
+    const firstJwtPayload = jsonwebtoken.verify(authToken, JWT_SECRET, {
+      algorithm: ['HS256']
     });
-    return chai
-      .request(app)
-      .post("/api/auth/refresh")
-      .set("Authorization", `Bearer ${jwToken}`)
+    return chai.request(app)
+      .post('/api/auth/refresh')
+      .set('Authorization', `Bearer ${authToken}`)
       .then(res => {
         expect(res).to.have.status(200);
         expect(res).to.be.json;
-        expect(res.body).to.be.an("object");
-        expect(res.body).to.include.keys('jwToken');
+        expect(res.body).to.be.a('object');
+        expect(res.body).to.include.keys('authToken');
 
-        const newJwtPayload = jsonwebtoken.verify(res.body.jwToken, JWT_SECRET,
-          {
-            algorithm: ["HS256"]
-          }
-        );
-        expect(newJwtPayload.user).to.be.an("object");
-      });
+        const newJwtPayload = jsonwebtoken.verify(res.body.authToken, JWT_SECRET, {
+            algorithm: ['HS256']
+        });
+        expect(newJwtPayload.user).to.be.a('object');
+        expect(newJwtPayload.exp).to.be.at.least(firstJwtPayload.exp);
+    });
   });
 
   // Generates a User object

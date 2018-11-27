@@ -37,7 +37,6 @@ describe('tests for api/idea', function () {
       })
       .then(createdUser => {
         testUser.id = createdUser.id;
-
         jwToken = jsonwebtoken.sign(
           {
             user: {
@@ -87,21 +86,6 @@ describe('tests for api/idea', function () {
     return stopServer();
   })
 
-  //   it('should create an idea', function() {
-  //     let newIdea = generateIdeaData();
-  //     return chai.request(app)
-  //       .post('/api/idea')
-  //       .set('Authorization', `Bearer ${jwToken}`)
-  //       .send(newIdea)
-  //       .then(res => {
-  //         expect(res).to.have.status(201);
-  //         expect(res).to.be.json;
-  //         expect(res.body).to.be.a('object');
-  //         expect(res.body).to.include.keys('title', 'description', 'status', 'likability');
-  //       })
-  //   });
-  // });
-
   it('should return user ideas', function () {
     return chai.request(app)
       .get('/api/idea')
@@ -123,7 +107,7 @@ describe('tests for api/idea', function () {
       .then(ideas => {
         expect(ideas).to.be.a('array');
         expect(ideas).to.have.lengthOf.at.least(1);
-        searchIdeas = ideas[0];
+        searchIdea = ideas[0];
 
         return chai.request(app)
           .get(`/api/idea/${searchIdea.id}`)
@@ -134,7 +118,14 @@ describe('tests for api/idea', function () {
         expect(res).to.be.json;
         expect(res.body).to.be.a('object');
         expect(res.body).to.include.keys('title', 'description', 'status', 'likability');
-      })
+        expect(res.body).to.deep.include({
+          id: searchIdea.id,
+          title: searchIdea.title,
+          description: searchIdea.description,
+          status: searchIdea.status,
+          likability: searchIdea.likability,
+        });
+      });
   });
 
   it('should update an idea details', function () {
@@ -193,14 +184,14 @@ describe('tests for api/idea', function () {
       password: faker.internet.password()
     };
   }
-  ///////////////Update faker Info
+  
   // Generates a idea object
   function generateIdeaData() {
     return {
       title: faker.lorem.word(),
       description: faker.lorem.sentence(),
       status: 'Not Started',
-      likeability: 'Love It',
+      likability: 'Love It',
     };
   }
 });

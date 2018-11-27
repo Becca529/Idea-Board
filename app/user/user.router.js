@@ -22,22 +22,23 @@ userRouter.post('/', (req, res) => {
     //Validate new user information against joi schema
     const validation = Joi.validate(newUser, UserJoiSchema);
     if (validation.error) {
-        console.log("validation errors");
+        console.log("joi validation errors");
         return response.status(400).json({ error: validation.error });
     }
+
 
     //Validate that there is not an existing account with either the provided email or username in MongoDB Step 
     User.findOne({
         $or: [
-            { email: newUser.email },
+            // { email: newUser.email },
             { username: newUser.username }
         ]
     }).then(user => {
         if (user) {
-            console.log("validation error- username/email")
             //if existing email or username found - return status code and error message
-            return res.status(400).json({ error: 'Database Error: A user with that username and/or email already exists.' });
-            //fix - throw error here  instead of return
+            const error = new Error('A user with that username and/or email already exists.');
+            error.status = 400;
+            return Promise.reject(error);
         }
         //If no username/email conflict - hash entered password
         return User.hashPassword(newUser.password);
@@ -52,10 +53,14 @@ userRouter.post('/', (req, res) => {
             })
             .catch(err => {
                 //if error with creating new user - return HTTP status code and error
+                err.status = 500;
                 console.error(err.message);
-                return res.status(500).json({ error: err.message });
+                return Promise.reject(err);
             });
     })
+    .catch(err => {
+            return res.status(err.status).json({ error: err.message });
+        })
 });
 
 

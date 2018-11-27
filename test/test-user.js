@@ -15,7 +15,6 @@ describe('tests for /api/user', function () {
     return startServer(TEST_DATABASE_URL);
   });
 
-  // Create a test user before each test
   beforeEach(function () {
     testUser = generateUserData();
 
@@ -70,12 +69,11 @@ describe('tests for /api/user', function () {
         searchUser = res.body[0];
         return chai.request(app).get(`/api/user/${searchUser.id}`);
       })
-      .then(user => {
-        expect(searchUser.id).to.equal(user.id);
-        expect(searchUser.firstname).to.equal(user.firstname);
-        expect(searchUser.lastname).to.equal(user.lastname);
-        expect(searchUser.email).to.equal(user.email);
-        expect(searchUser.username).to.equal(user.username);
+      .then(res => {
+        expect(res).to.have.status(200);
+        expect(res).to.be.json;
+        expect(res.body).to.be.a('object');
+        expect(res.body.id).to.equal(searchUser.id);
       });
   });
 

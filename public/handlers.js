@@ -107,11 +107,12 @@ function handleSignUpSubmit() {
             newUserData,
             onSuccess: displaySignUpSuccessHTML('.js-content'),
             onError: err => {
-                alert('There was a problem accessing your request, please try again later.');
+                console.log(err.responseJSON.error);
+                alert(err.responseJSON.error);
+                displayFormMessage(err.responseJSON.error, '.form-error-messages')
             }
         });
     });
-
 }
 
 //handles submiting Log In form 

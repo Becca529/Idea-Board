@@ -46,6 +46,10 @@ function displayNewIdeaForm(container, append = false) {
   appendOrReplace(null, container, generateNewIdeaForm, append);
 }
 
+function displayFormMessage(err, container, append = false) {
+  appendOrReplace(err, container, generateFormMessage, append);
+}
+
 //For the editable idea form this function selects the stored value for likability and status selector dropdown inputs
 function setSelectedIndex(s, valsearch) {
   for (i = 0; i < s.options.length; i++) {

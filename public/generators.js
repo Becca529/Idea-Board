@@ -21,6 +21,16 @@ function generateSignUpSuccessHTML() {
        </div>
        `
 }
+
+//Generates messages for new user form
+function generateFormMessage(err) {
+    return `
+       <p>${err.responseJSON.error}</p>
+       <p>${err}</p>
+       <p>${err.message}</p>
+       `
+}
+
 //Generates log in form
 function generateLogInForm() {
     return `
@@ -57,6 +67,8 @@ function generateSignUpForm() {
    <form id="form-sign-up" method="post">
        <fieldset>
            <legend>Create an Account</legend>
+           <div class="row form-error-messages">
+            </div>
            <div class="row">
            <div class="col-25">
                <label for="first-name-txt">First Name:<span class="required">*</span></label>

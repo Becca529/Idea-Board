@@ -161,6 +161,12 @@ input[type="text"], [type="password"], [type="email"], textarea, select {
   float: right;
 }
 
+.form-error-messages{
+  padding: 5px;
+  font-size: 11px;
+  color: red;
+}
+
 #form-log-in, #form-sign-up {
   max-width: 500px;
 }

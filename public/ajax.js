@@ -37,7 +37,7 @@ function doUserLogIn(options) {
             }
         },
         error: err => {
-            console.error(err);
+            console.error(err.responseJSON);
             if (onError) {
                 onError(err);
             }
