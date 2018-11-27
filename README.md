@@ -1,5 +1,5 @@
 # Idea Board
-__[Live demo (Heroku)](herokuapp.com)
+__[Live demo (Heroku)](https://shrouded-shelf-73200.herokuapp.com/)
 
 Never lose an idea for a project ever again! Idea Board app helps you stay organized by tracking all your ideas in one spot. 
 
@@ -57,7 +57,6 @@ In order to strengthen my core full-stack development capabilities I focused on 
 * Testing:
   * Mocha
   * Chai
-  * Sinon
   * Faker
 * Development/hosting environment
   * AWS
