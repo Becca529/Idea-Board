@@ -41,7 +41,7 @@ body {
 .icon {
   width: 65px;
   height: 65px;
-  padding-top: 5px;
+  margin-top: 20px;
 }
 
 .js-home-icon {
@@ -216,7 +216,6 @@ input[type="submit"]:hover {
 
 .row::after {
   clear: both;
-  
 }
 
 .col-3, .col-4, .col-6, .col-12 {
@@ -249,7 +248,3 @@ input[type="submit"]:hover {
     width: 100%;
   }
 }
- /* .topnav a {
-    float: none;
-    width: 100%;
-  } */

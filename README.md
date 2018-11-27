@@ -1,4 +1,5 @@
-:bulb: # Idea Board :bulb:
+# Idea Board
+
 [Live demo (Heroku)](https://shrouded-shelf-73200.herokuapp.com/)
 
 Never lose an idea for a project ever again! Idea Board app helps you stay organized by tracking all your ideas in one spot. 
