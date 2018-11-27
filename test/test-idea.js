@@ -54,7 +54,7 @@ describe('tests for api/idea', function () {
             subject: testUser.username
           }
         );
-
+        //Create new idea
         const seedData = [];
         for (let i = 1; i <= 10; i++) {
           const newIdea = generateIdeaData();
@@ -184,7 +184,7 @@ describe('tests for api/idea', function () {
       password: faker.internet.password()
     };
   }
-  
+
   // Generates a idea object
   function generateIdeaData() {
     return {

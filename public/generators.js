@@ -25,9 +25,7 @@ function generateSignUpSuccessHTML() {
 //Generates messages for new user form
 function generateFormMessage(err) {
     return `
-       <p>${err.responseJSON.error}</p>
        <p>${err}</p>
-       <p>${err.message}</p>
        `
 }
 
@@ -38,18 +36,18 @@ function generateLogInForm() {
        <fieldset>
            <legend>Please Sign In</legend>
            <div class="row">
-               <div class="col-25">
+               <div class="col-4">
                    <label for="username-txt">Username:</label>
                </div>
-               <div class="col-75">
+               <div class="col-6">
                    <input id="username-txt" type="text" required>
                </div>
            </div>
            <div class="row">
-               <div class="col-25">
+               <div class="col-4">
                    <label for="password-txt">Password:</label>
                </div>
-               <div class="col-75">
+               <div class="col-6">
                    <input id="password-txt" type="password" required>
                </div>
            </div>
@@ -70,43 +68,43 @@ function generateSignUpForm() {
            <div class="row form-error-messages">
             </div>
            <div class="row">
-           <div class="col-25">
+           <div class="col-4">
                <label for="first-name-txt">First Name:<span class="required">*</span></label>
            </div>
-           <div class="col-75">
+           <div class="col-6">
                <input id="first-name-txt" type="text" required>
            </div>
        </div>
        <div class="row">
-           <div class="col-25">
+           <div class="col-4">
                <label for="last-name-txt">Last Name:<span class="required">*</span></label>
            </div>
-           <div class="col-75">
+           <div class="col-6">
                <input id="last-name-txt" type="text" required>
            </div>
        </div>
        <div class="row">
-           <div class="col-25">
+           <div class="col-4">
                <label for="email-txt">Email:<span class="required">*</span></label>
            </div>
-           <div class="col-75">
+           <div class="col-6">
                <input id="email-txt" type="email" required>
            </div>
        </div>
        <div class="row">
-           <div class="col-25">
-               <label for="username-txt" maxlength="30">Username:<span class="required">*</span></label>
+           <div class="col-4">
+               <label for="username-txt">Username:<span class="required">*</span></label>
            </div>
-           <div class="col-75">
-               <input id="username-txt" type="text" required>
+           <div class="col-6">
+               <input id="username-txt" pattern=".{4,}" title="Please enter 4 or more characters" maxlength="30" type="text" required>
            </div>
        </div>
        <div class="row">
-           <div class="col-25">
-               <label for="password-txt" maxlength="30">Password:<span class="required">*</span></label>
+           <div class="col-4">
+               <label for="password-txt">Password:<span class="required">*</span></label>
            </div>
-           <div class="col-75">
-               <input id="password-txt" type="password" required placeholder="Min 6 characters">
+           <div class="col-6">
+               <input id="password-txt" pattern=".{6,}" title="Please enter six or more characters" maxlength="30" type="password" required placeholder="Min 6 characters">
            </div>
        </div>
        <div class="row">
@@ -137,7 +135,7 @@ function generateIdeaBoardTitle() {
 //Generates idea summary note for idea board
 function generateIdeaSummaryHTML(idea) {
     return `
-        <div class="col-25">
+        <div class="col-3">
             <ul class="idea-summary-note">
                 <li class="create-date-summary">${idea.createDate}</li>
                 <li class="summary-idea-title">${idea.title}</li>
@@ -186,26 +184,26 @@ function generateEditableIdeaForm(idea) {
                 <div class="create-date-summary">Created: ${idea.createDate}</div>
             </div>
             <div class="row">
-                <div class="col-25">
+                <div class="col-4">
                     <label for="title-txt">Title: </label>
                 </div>
-                <div class="col-75">
+                <div class="col-6">
                     <input id="title-txt" type="text" maxlength="45" required value="${idea.title}">
                 </div>
             </div>
             <div class="row">
-                <div class="col-25">
+                <div class="col-4">
                     <label for="description-txt">Description:</label>
                 </div>
-                <div class="col-75">
+                <div class="col-6">
                     <textarea id="description-txt" type="text" maxlength="500">${idea.description}</textarea>
                 </div>
             </div>
             <div class="row">
-                <div class="col-25">
+                <div class="col-4">
                     <label for="status-selector">Status:</label>
                 </div>
-                <div class="col-75">
+                <div class="col-6">
                     <select name="status-options" id="status-selector" class="form-field" required>
                         <option value="Not Started">Not Started</option>
                         <option value="Planning">Planning</option>
@@ -216,10 +214,10 @@ function generateEditableIdeaForm(idea) {
                 </div>
             </div>
             <div class="row">
-                <div class="col-25">
+                <div class="col-4">
                     <label for="likability-selector">Likability: </label>
                 </div>
-                <div class="col-75">
+                <div class="col-6">
                     <select name="likability-options" id="likability-selector" class="form-field" required>
                         <option value="Eh">Eh</option>
                         <option value="Like It">Like It</option>
@@ -243,26 +241,26 @@ function generateNewIdeaForm() {
            <fieldset>
                <legend>Add New Idea</legend>
                <div class="row">
-               <div class="col-25">
+               <div class="col-4">
                    <label for="title-txt">Title: </label>
                </div>
-               <div class="col-75">
+               <div class="col-6">
                    <input id="title-txt" maxlength="45" type="text" required>
                </div>
            </div>
            <div class="row">
-               <div class="col-25">
+               <div class="col-4">
                    <label for="description-txt">Description:</label>
                </div>
-               <div class="col-75">
+               <div class="col-6">
                    <textarea id="description-txt" type="textarea" maxlength="500" style="height:150px"></textarea>
                </div>
            </div>
            <div class="row">
-               <div class="col-25">
+               <div class="col-4">
                    <label for="status-select">Status: </label>
                </div>
-               <div class="col-75">
+               <div class="col-6">
                    <select name="status-options" id="status-selector" class="form-field" required>
                        <option value="Not-Started">Not Started</option>
                        <option value="Planning">Planning</option>
@@ -273,10 +271,10 @@ function generateNewIdeaForm() {
                </div>
            </div>
            <div class="row">
-               <div class="col-25">
+               <div class="col-4">
                    <label for="likability-selector">Likability: </label>
                </div>
-               <div class="col-75">
+               <div class="col-6">
                    <select name="likability-options" id="likability-selector" class="form-field" required>
                        <option value="Eh">Eh</option>
                        <option value="Like It">Like It</option>

@@ -1,5 +1,5 @@
-# Idea Board
-__[Live demo (Heroku)](https://shrouded-shelf-73200.herokuapp.com/)
+:bulb: # Idea Board :bulb:
+[Live demo (Heroku)](https://shrouded-shelf-73200.herokuapp.com/)
 
 Never lose an idea for a project ever again! Idea Board app helps you stay organized by tracking all your ideas in one spot. 
 
@@ -70,8 +70,9 @@ When transitioning this app from prototype to production, the following items wo
 
 * Idea Board
     * Include note component which would allow users to add notes for each idea
-    * Add additional idea board dashboard capabilities such as filtering by status and basic reports
+    * Add additional idea board dashboard capabilities such as filtering by status or likability and basic reports
 	
 * General
     * Rebuild front-end using React
+    * Add account profile
     * Create new Alexa skill for easy way to add new ideas and notes

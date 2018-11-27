@@ -10,21 +10,21 @@ function handleShowSignUp() {
 
 //handles clicking on log in button to display login form
 function handleShowLogIn() {
-    $('body').on("click", ".js-show-log-in-form-btn", (event) => {
+    $('body').on("click", ".js-show-log-in-form-btn", () => {
         displayLogInForm($('.js-content'));
     });
 }
 
 //handles clicking on cancel button when adding new idea
 function handleCancelbtn() {
-    $('body').on("click", ".cancel-btn", (event) => {
+    $('body').on("click", ".cancel-btn", () => {
         (user) ? getAndDisplayIdeas() : displayWelcomeHTML('.js-content');
     });
 }
 
 //handles clicking on new idea button to display new idea form
 function handleShowNewIdeaForm() {
-    $('body').on("click", ".js-show-new-idea-form-btn", (event) => {
+    $('body').on("click", ".js-show-new-idea-form-btn", () => {
         displayNewIdeaForm($('.js-content'));
     });
 }
@@ -45,11 +45,10 @@ function handleShowIdeaDetails() {
     });
 }
 
-//handles clicking on edit idea button
+//handles clicking on edit idea button to show editable idea form
 function handleShowEditableIdeaForm() {
     $('body').on("click", ".js-show-edit-idea-form-btn", (event) => {
         const ideaID = $(event.currentTarget).data('id');
-        console.log(ideaID);
         const success = response => {
             displayEditableIdeaForm(response, ('.js-content'), false);
         }
@@ -59,7 +58,6 @@ function handleShowEditableIdeaForm() {
             ideaID,
             onSuccess: success
         });
-
     });
 }
 
@@ -95,6 +93,7 @@ function handleHomeIcon() {
 function handleSignUpSubmit() {
     $('body').on("submit", "#form-sign-up", (event) => {
         event.preventDefault();
+        $('.form-error-messages').html('');
         const newUserData = {
             username: $('#username-txt').val(),
             password: $('#password-txt').val(),
@@ -103,12 +102,13 @@ function handleSignUpSubmit() {
             email: $('#email-txt').val()
         }
 
-        doNewUserCreation({
-            newUserData,
-            onSuccess: displaySignUpSuccessHTML('.js-content'),
+        doNewUserCreation({ 
+            newUserData, 
+            onSuccess: () => { 
+                displaySignUpSuccessHTML('.js-content')
+            },
             onError: err => {
                 console.log(err.responseJSON.error);
-                alert(err.responseJSON.error);
                 displayFormMessage(err.responseJSON.error, '.form-error-messages')
             }
         });

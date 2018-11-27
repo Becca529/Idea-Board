@@ -30,13 +30,13 @@ userRouter.post('/', (req, res) => {
     //Validate that there is not an existing account with either the provided email or username in MongoDB Step 
     User.findOne({
         $or: [
-            // { email: newUser.email },
+            { email: newUser.email },
             { username: newUser.username }
         ]
     }).then(user => {
         if (user) {
             //if existing email or username found - return status code and error message
-            const error = new Error('A user with that username and/or email already exists.');
+            const error = new Error('A user with that username and/or email already exists. Please try again.');
             error.status = 400;
             return Promise.reject(error);
         }
