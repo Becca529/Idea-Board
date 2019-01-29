@@ -1,0 +1,26 @@
+<form id="form-update-idea" method="put" data-id="${idea.id}">
+    <fieldset>
+     <legend>Idea Details</legend>
+         <div class="row">
+             <div class="create-date-summary">Created: ${idea.createDate}</div>
+         </div>
+         <div class="row">
+             <div class="col-4">
+                 <label for="title-txt">Title: </label>
+             </div>
+             <div class="col-6">
+                 <input id="title-txt" type="text" maxlength="45" required value="${idea.title}">
+             </div>
+         </div>
+         <div class="row">
+             <div class="col-4">
+                 <label for="description-txt">Description:</label>
+             </div>
+             <div class="col-6">
+                 <textarea id="description-txt" type="text" maxlength="500">${idea.description}</textarea>
+             </div>
+         </div>
+         <div class="row">
+             <div class="col-4">
+                 <label for="status-selector">Status:</label>
+             </div>

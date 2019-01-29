@@ -1,10 +1,14 @@
 # Idea Board
 
-[Live demo (Heroku)](https://shrouded-shelf-73200.herokuapp.com/)
-
 Never lose an idea for a project ever again! Idea Board app helps you stay organized by tracking all your ideas in one spot. 
 
 Note: This is a minimum viable product prototype for a larger application. This application was built using Node.js, Express, and MongDB. 
+
+[Live demo (Heroku)](https://shrouded-shelf-73200.herokuapp.com/)
+
+Login with the following:
+* username: DemoUser1
+* password: p123456
 
 ## Motivation
 
