@@ -57,6 +57,12 @@ function generateLogInForm() {
            </div>
        </fieldset>
    </form>
+   <div class="demo-login-details row"><span class="demo-title">Demo User Account</span>
+   <ul>
+     <li>Username: DemoUser1</li>
+     <li>Password: p123456</li>
+   </ul>
+ </div>
        `
 }
 //Generates sign up form

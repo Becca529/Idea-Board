@@ -19,7 +19,7 @@ a {
 
 .top-nav {
   overflow: hidden;
-  background-color: #333;
+  background-color:#808080;
   position: fixed;
   top: 0;
   width: 100%;
@@ -76,7 +76,7 @@ h1 {
 
 button {
   background-color: rgba(123, 155, 142);
-  color: white;
+  color: darkslategray;
   padding: 10px 10px;
   margin: 10px;
   border: none;
@@ -205,7 +205,7 @@ label {
 
 input[type="submit"] {
   background-color: #4caf50;
-  color: white;
+  color: darkslategray;
   padding: 12px 20px;
   border: none;
   border-radius: 4px;
@@ -221,12 +221,22 @@ input[type="submit"]:hover {
   height: 150px;
 }
 
+.demo-login-details {
+  text-align: center;
+  padding: 10px;
+  font-size: 13px;
+}
+
+.demo-title {
+  font-weight: bold;
+}
+
 .row {
   max-width: 1000px;
   padding-left: 20px;
   padding-right: 20px;
   margin: 0 auto;
-  padding-top: 10px;
+  padding-top: 15px;
 }
 
 .row::before,
@@ -251,6 +261,7 @@ input[type="submit"]:hover {
   margin-bottom: 5px;
 }
 
+
 /* Non-mobile, grid */
 @media only screen and (min-width: 640px) {
   .col-3 {
@@ -267,5 +278,15 @@ input[type="submit"]:hover {
 
   .col-12 {
     width: 100%;
+  }
+
+  button {
+    background-color: rgba(123, 155, 142);
+    color: white;
+    
+  }
+  
+  button:hover {
+    background-color: rgba(46, 148, 26, 0.467);
   }
 }
